@@ -9,9 +9,11 @@ import Graphs from "./components/Graphs";
 
 const page = () => {
   return (
-    <div className=" col-span-5 flex flex-col bg-white/90 
-     bg-gradient-to-br from-[#cfd6e6] to-[#ffffff] 
-     gap-1 rounded-xl p-1.5 ">
+    <div
+      className="w-full flex flex-col 
+      bg-gradient-to-br from-[#485475] via-[#e0e1e4] to-[#e0dede] 
+      gap-1 rounded-xl p-1.5 shadow-lg backdrop-blur-md bg-white/30"
+    >
       <TitleBar />
       <div className=" col-span-5 grid grid-cols-8 h-full gap-1.5">
         <div className=" col-span-6  grid grid-rows-2 gap-1.5">

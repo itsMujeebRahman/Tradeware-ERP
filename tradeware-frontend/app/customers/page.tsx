@@ -3,7 +3,7 @@ import Customer from "../components/Customer";
 
 const page = () => {
   return (
-    <div className="col-span-5 bg-white flex items-center justify-center py-5">
+    <div className="w-full bg-white flex items-center justify-center py-5 rounded-xl">
       <Customer />
     </div>
   );

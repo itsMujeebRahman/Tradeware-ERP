@@ -27,7 +27,7 @@ app.post("/addCustomer/:id", async (req, res) => {
   await CustomerModel.findByIdAndUpdate(id, customerData)
     .then(async () => {
       return CustomerModel.find()
-        .then((result) => res.json(result))
+        .then((result) => res.json('gfujhfdkgkun'))
         .catch((err) => res.status(500).json({ error: err.message }));
     })
     .catch((err) => res.json(err));

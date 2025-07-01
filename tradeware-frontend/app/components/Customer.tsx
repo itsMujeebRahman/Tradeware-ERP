@@ -75,6 +75,7 @@ const Customer = () => {
           `http://localhost:3001/addCustomer/${fetchId}`,
           customerData
         );
+
         toast.success(`${customerData.customerName}'s Data Saved`);
       } catch (error) {
         toast.success(`Unable to Save ${customerData.customerName}'s Data `);
@@ -192,8 +193,8 @@ const Customer = () => {
       </div>
       <div className=" p-2 px-10 flex flex-col items-center justify-between  py-10 pt-25">
         <div className=" w-full h-[30vh] flex flex-col gap-2">
-          <h1  className="font-bold text-2xl">Notes</h1>
-          <textarea className="border h-full w-full"/>
+          <h1 className="font-bold text-2xl">Notes</h1>
+          <textarea className="border h-full w-full" />
         </div>
         <div className=" flex items-center gap-2">
           <button
