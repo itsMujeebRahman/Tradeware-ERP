@@ -26,6 +26,12 @@ const NavbarLinks = [
 ];
 
 const Navbar = ({ navClose, setNavClose }: props) => {
+  const [buttonBg, setButtonBg] = useState<any>();
+
+  const handleButtonBackground = (index: any) => {
+    setButtonBg(index);
+  };
+
   return (
     <div
       className={`shadow bg-[#212023] h-full p-3 flex flex-col gap-3 rounded-2xl ${
@@ -36,7 +42,7 @@ const Navbar = ({ navClose, setNavClose }: props) => {
         {navClose ? (
           ""
         ) : (
-          <h1 className="font-bold text-2xl text-white/95">TRADE WARE</h1>
+          <h1 className="font-bold text-xl text-white/95">TRADE WARE</h1>
         )}
 
         <ChevronRight
@@ -48,7 +54,11 @@ const Navbar = ({ navClose, setNavClose }: props) => {
       <div className="flex flex-col gap-2 ">
         {NavbarLinks.map((links, index) => (
           <Link href={links.Link} key={index}>
-            <button className="p-3 w-full flex items-center justify-start gap-3 hover:bg-[#363538] rounded-xl ">
+            <button
+              className={`p-3 w-full flex items-center justify-start gap-3 hover:bg-[#363538] rounded-xl 
+                ${buttonBg === index ? "bg-[#363538]" : ""}`}
+              onClick={() => handleButtonBackground(index)}
+            >
               <span className="text-white">{links.Icon}</span>
               {navClose ? "" : <p className="text-white ">{links.Name}</p>}
             </button>

@@ -37,7 +37,7 @@ const Customer = () => {
   const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
   const { data: customer, mutate } = useSWR(
-    "http://localhost:3001/getCustomer",
+    "http://localhost:3001/customer",
     fetcher
   );
 
@@ -62,7 +62,7 @@ const Customer = () => {
     if (addCustomerData) {
       try {
         const { _id, ...customerPayload } = customerData; // removd id and send all othr data to back
-        await axios.post("http://localhost:3001/addCustomer", customerPayload);
+        await axios.post("http://localhost:3001/customer", customerPayload);
         toast.success(`${customerData.customerName}'s Data Saved`);
       } catch (error) {
         toast.success(`Unable to Save ${customerData.customerName}'s Data `);
@@ -72,7 +72,7 @@ const Customer = () => {
     } else {
       try {
         await axios.post(
-          `http://localhost:3001/addCustomer/${fetchId}`,
+          `http://localhost:3001/customer/${fetchId}`,
           customerData
         );
 
