@@ -1,229 +1,137 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import InputFields from "./InputFields";
 import axios from "axios";
 import toast from "react-hot-toast";
-import CustomerList from "./CustomerList";
+import List from "./List";
 import useSWR from "swr";
 
-interface customer {
-  customerName: string;
-  customerAddress1: string;
-  customerAddress2: string;
-  customerAddress3: string;
-  customerPhone: string;
-  customerEmail: string;
-  customerTaxNo: string;
+interface person {
+  Name: string;
+  Address1: string;
+  Address2: string;
+  Address3: string;
+  Phone: string;
+  Email: string;
+  TaxNo: string;
+  Notes: string;
   _id: string;
 }
 
-const dataReset: customer = {
-  customerName: "",
-  customerAddress1: "",
-  customerAddress2: "",
-  customerAddress3: "",
-  customerPhone: "",
-  customerEmail: "",
-  customerTaxNo: "",
+const dataReset: person = {
+  Name: "",
+  Address1: "",
+  Address2: "",
+  Address3: "",
+  Phone: "",
+  Email: "",
+  TaxNo: "",
+  Notes: "",
   _id: "",
 };
 
+const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+
 const Customer = () => {
-  const [customerData, setCustomerData] = useState<customer>(dataReset);
+  const [personData, setPersonData] = useState<person>(dataReset);
   const [enableList, setEnableList] = useState<boolean>(false);
-  const [editCustomerData, setEditCustomerData] = useState<boolean>(true);
-  const [addCustomerData, setAddCustomerData] = useState<boolean>(true);
-  const [fetchId, setFetchId] = useState<string>("");
+  const [editData, setEditData] = useState<boolean>(true);
+  const [addData, setAddData] = useState<boolean>(true);
+  const [customerId, setCustomerId] = useState<string>();
 
-  const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+  const { data, mutate } = useSWR("http://localhost:3001/customer", fetcher);
 
-  const { data: customer, mutate } = useSWR(
-    "http://localhost:3001/customer",
-    fetcher
-  );
-
-  const handleCustomerData = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFetchPersonData = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
-    setCustomerData((Prev) => ({
-      ...Prev,
-      [name]: value,
-    }));
+    setPersonData((Prev) => ({ ...Prev, [name]: value }));
+    console.log(personData);
   };
 
-  const handleEditMode = (id: string) => {
+  const handleEditPersonData = (id: string) => {
     setEnableList(false);
-    setAddCustomerData(false);
-    setEditCustomerData(false);
-    setFetchId(id);
-    setCustomerData(customer.find((cust: customer) => cust._id === id));
+    setPersonData(data.find((sup: person) => sup._id === id));
+    setAddData(false);
+    setEditData(false);
+    setCustomerId(id);
   };
 
-  const handleSendCustomerData = async (fetchId: string) => {
-    if (addCustomerData) {
+  const handleSendCustomerData = async (customerId: string) => {
+    if (addData) {
+      const { _id, ...customerPayload } = personData;
       try {
-        const { _id, ...customerPayload } = customerData; // removd id and send all othr data to back
         await axios.post("http://localhost:3001/customer", customerPayload);
-        toast.success(`${customerData.customerName}'s Data Saved`);
-      } catch (error) {
-        toast.success(`Unable to Save ${customerData.customerName}'s Data `);
+        toast.success(`${personData.Name}'s Data Saved`);
+      } catch {
+        toast.error(`Error while Saving ${personData.Name}'s Data `);
       }
+      setPersonData(dataReset);
       mutate();
-      setCustomerData(dataReset);
     } else {
       try {
         await axios.post(
-          `http://localhost:3001/customer/${fetchId}`,
-          customerData
+          `http://localhost:3001/customer/${customerId}`,
+          personData
         );
-
-        toast.success(`${customerData.customerName}'s Data Saved`);
-      } catch (error) {
-        toast.success(`Unable to Save ${customerData.customerName}'s Data `);
+        toast.success(`${personData.Name}'s Data Saved`);
+      } catch {
+        toast.error(`Error while Saving ${personData.Name}'s Data `);
       }
-      mutate();
-      setCustomerData(dataReset);
     }
-  };
-
-  const handleCancel = () => {
-    setCustomerData(dataReset);
-    setAddCustomerData(true);
+    setPersonData(dataReset);
+    setAddData(true);
+    mutate();
   };
 
   return (
-    <div className="flex h-full">
-      <div className=" border-l-4 border-gray-600 h-full flex flex-col gap-10 py-10 ">
-        {enableList ? (
-          <CustomerList
-            setEnableList={setEnableList}
-            customer={customer}
-            handleEditMode={handleEditMode}
-          />
-        ) : (
-          ""
-        )}
-
-        <div className=" w-full pl-5">
-          <h1 className="font-bold text-4xl">Customer Creation</h1>
-        </div>
-        <div className=" pl-5 flex flex-col gap-5 w-[50vw]">
-          <div className=" flex flex-col ">
-            Customer Name
-            <input
-              name="customerName"
-              value={customerData?.customerName}
-              onChange={handleCustomerData}
-              className={`border p-2 text-black ${
-                !editCustomerData ? "text-gray-500 border-gray-300" : ""
-              }`}
-              disabled={!editCustomerData}
-            />
-          </div>
-          <div className="flex flex-col border border-gray-300 rounded-2xl p-5">
-            Address-1
-            <input
-              className={`border p-1 ${
-                !editCustomerData ? "text-gray-500 border-gray-300" : ""
-              }`}
-              onChange={handleCustomerData}
-              name="customerAddress1"
-              value={customerData?.customerAddress1}
-              disabled={!editCustomerData}
-            />
-            Address-2
-            <input
-              className={`border p-1 ${
-                !editCustomerData ? "text-gray-500 border-gray-300" : ""
-              }`}
-              onChange={handleCustomerData}
-              name="customerAddress2"
-              value={customerData?.customerAddress2}
-              disabled={!editCustomerData}
-            />
-            Address-3
-            <input
-              className={`border p-1 ${
-                !editCustomerData ? "text-gray-500 border-gray-300" : ""
-              }`}
-              onChange={handleCustomerData}
-              name="customerAddress3"
-              value={customerData?.customerAddress3}
-              disabled={!editCustomerData}
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-5">
-              Contact
-              <input
-                className={`border p-1 w-full ${
-                  !editCustomerData ? "text-gray-500 border-gray-300" : ""
-                }`}
-                onChange={handleCustomerData}
-                name="customerPhone"
-                value={customerData?.customerPhone}
-                disabled={!editCustomerData}
-              />
-            </div>
-            <div className="flex items-center gap-9">
-              Email
-              <input
-                className={`border p-1 w-full ${
-                  !editCustomerData ? "text-gray-500 border-gray-300" : ""
-                }`}
-                onChange={handleCustomerData}
-                name="customerEmail"
-                value={customerData?.customerEmail}
-                disabled={!editCustomerData}
-              />
-            </div>
-            <div className="flex items-center gap-13">
-              Tax
-              <input
-                className={`border p-1 w-full ${
-                  !editCustomerData ? "text-gray-500 border-gray-300" : ""
-                }`}
-                onChange={handleCustomerData}
-                name="customerTaxNo"
-                value={customerData?.customerTaxNo}
-                disabled={!editCustomerData}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className=" p-2 px-10 flex flex-col items-center justify-between  py-10 pt-25">
-        <div className=" w-full h-[30vh] flex flex-col gap-2">
-          <h1 className="font-bold text-2xl">Notes</h1>
-          <textarea className="border h-full w-full" />
-        </div>
-        <div className=" flex items-center gap-2">
+    <div className="h-full flex flex-col gap-2 ">
+      {enableList ? (
+        <List
+          setEnableList={setEnableList}
+          data={data}
+          handleEditPersonData={handleEditPersonData}
+        />
+      ) : (
+        ""
+      )}
+      <div className=" flex items-center justify-between p-5 rounded-xl ">
+        <h1 className="font-bold text-2xl">Customer Creation</h1>
+        <div className="flex gap-2">
           <button
-            className="bg-gray-600  p-2 w-20 text-white rounded-xl"
+            className="bg-gray-600  p-2 w-20 text-white rounded"
+            onClick={() => setEditData(true)}
+          >
+            Edit
+          </button>
+          <button
+            className="bg-gray-600  p-2 w-20 text-white rounded"
             onClick={() => setEnableList(true)}
           >
             List
           </button>
           <button
-            className="bg-gray-600  p-2 w-20 text-white rounded-xl"
-            onClick={() => setEditCustomerData(true)}
-          >
-            Edit
-          </button>
-          <button
-            onClick={() => handleSendCustomerData(fetchId)}
-            className={`  p-2 w-20 text-white rounded-xl ${
-              !editCustomerData ? "bg-gray-300" : "bg-gray-600"
-            } `}
-            disabled={!editCustomerData}
+            className="bg-gray-600  p-2 w-20 text-white rounded"
+            onClick={() => handleSendCustomerData(data._id)}
           >
             Save
           </button>
-          <button
-            className="bg-gray-600  p-2 w-20 text-white rounded-xl"
-            onClick={handleCancel}
-          >
+          <button className="bg-gray-600  p-2 w-20 text-white rounded">
             Cancel
           </button>
+        </div>
+      </div>
+      <div className=" rounded-xl h-[84vh] columns-3 backdrop-blur-xl bg-white border border-gray-300 py-5 ">
+        <div className="px-5 flex flex-col gap-2 break-inside-avoid ">
+          {["Name", "Address", "Phone", "Email", "TaxNo", "Notes"].map(
+            (inputName, index) => (
+              <InputFields
+                key={index}
+                inputName={inputName}
+                handleFetchPersonData={handleFetchPersonData}
+                personData={personData}
+                editData={editData}
+              />
+            )
+          )}
         </div>
       </div>
     </div>

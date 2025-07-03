@@ -1,60 +1,48 @@
 import React from "react";
 
-interface supplier {
-  supplierName: string;
-  supplierAddress1: string;
-  supplierAddress2: string;
-  supplierAddress3: string;
-  supplierPhone: string;
-  supplierEmail: string;
-  supplierTaxNo: string;
-  supplierNotes: string;
+interface person {
+  Name: string;
+  Address1: string;
+  Address2: string;
+  Address3: string;
+  Phone: string;
+  Email: string;
+  TaxNo: string;
+  Notes: string;
+  _id: string;
 }
 
 interface props {
-  person: supplier;
+  person: person;
   windowSize: boolean;
+  handleEditPersonData: (id: string) => void;
 }
 
-const SinglePerson = ({ person, windowSize }: props) => {
+const SinglePerson = ({ person, windowSize, handleEditPersonData }: props) => {
   return (
     <div>
       {windowSize ? (
-        <div className="grid grid-cols-7 p-2 gap-2 shadow rounded-xl bg-white">
-          <span className="border-r border-r-gray-300">
-            {person.supplierName}
-          </span>
-          <span className="border-r border-r-gray-300">
-            {person.supplierAddress1}
-          </span>
-          <span className="border-r border-r-gray-300">
-            {person.supplierAddress2}
-          </span>
-          <span className="border-r border-r-gray-300">
-            {person.supplierPhone}
-          </span>
-          <span className="border-r border-r-gray-300">
-            {person.supplierEmail}
-          </span>
-          <span className="border-r border-r-gray-300">
-            {person.supplierTaxNo}
-          </span>
-          <span className="break-all">{person.supplierNotes}</span>
+        <div
+          className="grid grid-cols-7 p-2 gap-2 shadow rounded-xl bg-white"
+          onClick={() => handleEditPersonData(person._id)}
+        >
+          <span className="border-r border-r-gray-300">{person.Name}</span>
+          <span className="border-r border-r-gray-300">{person.Address1}</span>
+          <span className="border-r border-r-gray-300">{person.Address2}</span>
+          <span className="border-r border-r-gray-300">{person.Phone}</span>
+          <span className="border-r border-r-gray-300">{person.Email}</span>
+          <span className="border-r border-r-gray-300">{person.TaxNo}</span>
+          <span className="break-all">{person.Notes}</span>
         </div>
       ) : (
-        <div className="grid grid-cols-4 p-2 gap-2 shadow rounded-xl bg-white">
-          <span className="border-r border-r-gray-300">
-            {person.supplierName}
-          </span>
-          <span className="border-r border-r-gray-300">
-            {person.supplierAddress1}
-          </span>
-          <span className="border-r border-r-gray-300">
-            {person.supplierPhone}
-          </span>
-          <span >
-            {person.supplierEmail}
-          </span>
+        <div
+          className="grid grid-cols-4 p-2 gap-2 shadow rounded-xl bg-white"
+          onClick={() => handleEditPersonData(person._id)}
+        >
+          <span className="border-r border-r-gray-300">{person.Name}</span>
+          <span className="border-r border-r-gray-300">{person.Address1}</span>
+          <span className="border-r border-r-gray-300">{person.Phone}</span>
+          <span>{person.Email}</span>
         </div>
       )}
     </div>

@@ -1,5 +1,6 @@
 "use client";
 import {
+  CherryIcon,
   ChevronRight,
   LayoutDashboard,
   Receipt,
@@ -19,6 +20,7 @@ const NavbarLinks = [
   { Link: "/", Icon: <LayoutDashboard />, Name: "Dashboard" },
   { Link: "/customers", Icon: <Users />, Name: "Customers" },
   { Link: "/suppliers", Icon: <Users />, Name: "Suppliers" },
+  { Link: "/products", Icon: <CherryIcon />, Name: "Products" },
   { Link: "/purchase", Icon: <ShoppingCart />, Name: "Purchase" },
   { Link: "/sales", Icon: <Receipt />, Name: "Sales" },
   { Link: "/inventory", Icon: <ShoppingBag />, Name: "Inventory" },

@@ -6,60 +6,101 @@ import toast from "react-hot-toast";
 import List from "./List";
 import useSWR from "swr";
 
-interface supplier {
-  supplierName: string;
-  supplierAddress1: string;
-  supplierAddress2: string;
-  supplierAddress3: string;
-  supplierPhone: string;
-  supplierEmail: string;
-  supplierTaxNo: string;
-  supplierNotes: string;
+interface person {
+  Name: string;
+  Address1: string;
+  Address2: string;
+  Address3: string;
+  Phone: string;
+  Email: string;
+  TaxNo: string;
+  Notes: string;
+  _id: string;
 }
 
-const dataReset: supplier = {
-  supplierName: "",
-  supplierAddress1: "",
-  supplierAddress2: "",
-  supplierAddress3: "",
-  supplierPhone: "",
-  supplierEmail: "",
-  supplierTaxNo: "",
-  supplierNotes: "",
+const dataReset: person = {
+  Name: "",
+  Address1: "",
+  Address2: "",
+  Address3: "",
+  Phone: "",
+  Email: "",
+  TaxNo: "",
+  Notes: "",
+  _id: "",
 };
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 const Supplier = () => {
-  const [supplierData, setSupplierData] = useState<supplier>(dataReset);
+  const [personData, setPersonData] = useState<person>(dataReset);
   const [enableList, setEnableList] = useState<boolean>(false);
+  const [editData, setEditData] = useState<boolean>(true);
+  const [addData, setAddData] = useState<boolean>(true);
+  const [supplierId, setSupplierId] = useState<string>("");
 
   const { data, mutate } = useSWR("http://localhost:3001/supplier", fetcher);
 
-  const handleSupplierData = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFetchPersonData = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setSupplierData((Prev) => ({ ...Prev, [name]: value }));
-    console.log(supplierData);
+    setPersonData((Prev) => ({ ...Prev, [name]: value }));
+    console.log(personData);
+  };
+
+  const handleEditPersonData = (id: string) => {
+    setEnableList(false);
+    setPersonData(data.find((sup: person) => sup._id === id));
+    setAddData(false);
+    setEditData(false);
+    setSupplierId(id);
   };
 
   const handleSendSupplierData = async () => {
-    try {
-      await axios.post("http://localhost:3001/supplier", supplierData);
-      toast.success(`${supplierData.supplierName}'s Data Saved`);
-    } catch {
-      toast.error(`Error while Saving ${supplierData.supplierName}'s Data `);
+    console.log("id reachd here", supplierId);
+    if (addData) {
+      const { _id, ...supplierPayload } = personData;
+      try {
+        await axios.post("http://localhost:3001/supplier", supplierPayload);
+        toast.success(`${personData.Name}'s Data Saved`);
+      } catch {
+        toast.error(`Error while Saving ${personData.Name}'s Data `);
+      }
+      setPersonData(dataReset);
+      mutate();
+    } else {
+      try {
+        await axios.post(
+          `http://localhost:3001/supplier/${supplierId}`,
+          personData
+        );
+        toast.success(`${personData.Name}'s Data Saved`);
+      } catch {
+        toast.error(`Error while Saving ${personData.Name}'s Data `);
+      }
     }
-    setSupplierData(dataReset);
+    setPersonData(dataReset);
+    setAddData(true);
     mutate();
   };
 
   return (
     <div className="h-full flex flex-col gap-2 ">
-      {enableList ? <List setEnableList={setEnableList} data={data} /> : ""}
+      {enableList ? (
+        <List
+          setEnableList={setEnableList}
+          data={data}
+          handleEditPersonData={handleEditPersonData}
+        />
+      ) : (
+        ""
+      )}
       <div className=" flex items-center justify-between p-5 rounded-xl ">
         <h1 className="font-bold text-2xl">Supplier Creation</h1>
         <div className="flex gap-2">
-          <button className="bg-gray-600  p-2 w-20 text-white rounded">
+          <button
+            className="bg-gray-600  p-2 w-20 text-white rounded"
+            onClick={() => setEditData(true)}
+          >
             Edit
           </button>
           <button
@@ -86,8 +127,9 @@ const Supplier = () => {
               <InputFields
                 key={index}
                 inputName={inputName}
-                handleSupplierData={handleSupplierData}
-                supplierData={supplierData}
+                handleFetchPersonData={handleFetchPersonData}
+                personData={personData}
+                editData={editData}
               />
             )
           )}

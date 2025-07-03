@@ -1,38 +1,40 @@
-import { Phone } from "lucide-react";
 import React from "react";
 
-interface supplier {
-  supplierName: string;
-  supplierAddress1: string;
-  supplierAddress2: string;
-  supplierAddress3: string;
-  supplierPhone: string;
-  supplierEmail: string;
-  supplierTaxNo: string;
-  supplierNotes: string;
+interface person {
+  Name: string;
+  Address1: string;
+  Address2: string;
+  Address3: string;
+  Phone: string;
+  Email: string;
+  TaxNo: string;
+  Notes: string;
+  _id: string;
 }
 
 interface props {
   inputName: string;
-  handleSupplierData: any;
-  supplierData: supplier;
+  handleFetchPersonData: any;
+  personData: person;
+  editData: boolean;
 }
 
-const changeValue: Record<string, keyof supplier> = {
-  Name: "supplierName",
-  Address1: "supplierAddress1",
-  Address2: "supplierAddress2",
-  Address3: "supplierAddress3",
-  Phone: "supplierPhone",
-  Email: "supplierEmail",
-  TaxNo: "supplierTaxNo",
-  Notes: "supplierNotes",
+const changeValue: Record<string, keyof person> = {
+  Name: "Name",
+  Address1: "Address1",
+  Address2: "Address2",
+  Address3: "Address3",
+  Phone: "Phone",
+  Email: "Email",
+  TaxNo: "TaxNo",
+  Notes: "Notes",
 };
 
 const InputFields = ({
   inputName,
-  handleSupplierData,
-  supplierData,
+  handleFetchPersonData,
+  personData,
+  editData,
 }: props) => {
   return (
     <div>
@@ -40,43 +42,58 @@ const InputFields = ({
         <div className="flex flex-col gap-1">
           <p className="text-sm ">{inputName}</p>
           <input
-            className=" border border-gray-400 focus:outline-gray-400 p-1 rounded bg-white "
+            className={`border focus:outline-gray-400 p-1 rounded bg-white ${
+              editData ? " border-gray-500" : "  border-gray-300"
+            }`}
             name={changeValue[inputName]}
-            onChange={handleSupplierData}
-            value={supplierData[changeValue[inputName]]}
+            onChange={handleFetchPersonData}
+            value={personData[changeValue[inputName]] || ""}
+            disabled={!editData}
           />
         </div>
       ) : inputName === "Address" ? (
         <div className="flex flex-col gap-1">
           <p className="text-sm">{inputName}</p>
           <input
-            className=" border border-gray-400 focus:outline-gray-400 p-1 rounded bg-white "
-            name={changeValue[inputName+1]}
-            onChange={handleSupplierData}
-            value={supplierData[changeValue[inputName+1]]}
+            className={`border focus:outline-gray-400 p-1 rounded bg-white ${
+              editData ? " border-gray-500" : "  border-gray-300"
+            }`}
+            name={changeValue[inputName + 1]}
+            onChange={handleFetchPersonData}
+            value={personData[changeValue[inputName + 1]] || ""}
+            disabled={!editData}
           />
           <input
-            className=" border border-gray-400 focus:outline-gray-400 p-1 rounded bg-white "
-            name={changeValue[inputName+2]}
-            onChange={handleSupplierData}
-            value={supplierData[changeValue[inputName+2]]}
+            className={`border focus:outline-gray-400 p-1 rounded bg-white ${
+              editData ? " border-gray-500" : "  border-gray-300"
+            }`}
+            name={changeValue[inputName + 2]}
+            onChange={handleFetchPersonData}
+            value={personData[changeValue[inputName + 2]] || ""}
+            disabled={!editData}
           />
           <input
-            className=" border border-gray-400 focus:outline-gray-400 p-1 rounded bg-white "
-            name={changeValue[inputName+3]}
-            onChange={handleSupplierData}
-            value={supplierData[changeValue[inputName+3]]}
+            className={`border focus:outline-gray-400 p-1 rounded bg-white ${
+              editData ? " border-gray-500" : "  border-gray-300"
+            }`}
+            name={changeValue[inputName + 3]}
+            onChange={handleFetchPersonData}
+            value={personData[changeValue[inputName + 3]] || ""}
+            disabled={!editData}
           />
         </div>
       ) : inputName === "Notes" ? (
         <div className="flex flex-col gap-1">
           <p className="text-sm">{inputName}</p>
           <textarea
-            className=" border border-gray-400 focus:outline-gray-400 p-1 rounded bg-white 
-          h-[20vh] resize-none"
+            className={` border focus:outline-gray-400 p-1 rounded bg-white 
+          h-[20vh] resize-none ${
+            editData ? " border-gray-500" : " border-gray-300"
+          }`}
             name={changeValue[inputName]}
-            onChange={handleSupplierData}
-            value={supplierData[changeValue[inputName]]}
+            onChange={handleFetchPersonData}
+            value={personData[changeValue[inputName]] || ""}
+            disabled={!editData}
           />
         </div>
       ) : (

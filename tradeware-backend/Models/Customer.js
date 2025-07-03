@@ -1,36 +1,39 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const customerSchema = new mongoose.Schema({
-  customerName: {
+  Name: {
     type: String,
     required: true,
     trim: true,
   },
-  customerAddress1: {
+  Address1: {
     type: String,
     required: true,
   },
-  customerAddress2: {
+  Address2: {
     type: String,
   },
-  customerAddress3: {
+  Address3: {
     type: String,
   },
-  customerPhone: {
+  Phone: {
     type: String,
     required: true,
     trim: true,
   },
-  customerEmail: {
+  Email: {
     type: String,
     trim: true,
   },
-  customerTaxNo: {
+  TaxNo: {
     type: String,
     trim: true,
+  },
+  Notes: {
+    type: String,
   },
 });
 
 const CustomerModel = mongoose.model("customers", customerSchema);
 
-module.exports = CustomerModel;
+export default CustomerModel;

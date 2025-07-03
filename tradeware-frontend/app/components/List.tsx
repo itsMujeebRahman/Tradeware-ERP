@@ -2,23 +2,25 @@ import { FullscreenIcon, X } from "lucide-react";
 import React, { useState } from "react";
 import SinglePerson from "./SinglePerson";
 
-interface supplier {
-  supplierName: string;
-  supplierAddress1: string;
-  supplierAddress2: string;
-  supplierAddress3: string;
-  supplierPhone: string;
-  supplierEmail: string;
-  supplierTaxNo: string;
-  supplierNotes: string;
+interface person {
+  Name: string;
+  Address1: string;
+  Address2: string;
+  Address3: string;
+  Phone: string;
+  Email: string;
+  TaxNo: string;
+  Notes: string;
+  _id: string;
 }
 
 interface props {
   setEnableList: React.Dispatch<React.SetStateAction<boolean>>;
-  data: supplier[];
+  data: person[];
+  handleEditPersonData: (id: string) => void;
 }
 
-const List = ({ setEnableList, data }: props) => {
+const List = ({ setEnableList, data, handleEditPersonData }: props) => {
   const [windowSize, setWindowSize] = useState<boolean>(false);
   return (
     <div className="fixed top-0 left-0 h-screen w-screen flex items-center justify-center bg-black/30 z-50 p-4">
@@ -68,10 +70,17 @@ const List = ({ setEnableList, data }: props) => {
             </div>
           )}
 
-          <div className=" h-full  flex flex-col gap-1 p-1 bg-black/2 border border-gray-300 
-          overflow-y-scroll rounded-b-xl">
+          <div
+            className=" h-full  flex flex-col gap-1 p-1 bg-black/2 border border-gray-300 
+          overflow-y-scroll rounded-b-xl"
+          >
             {data.map((person, index) => (
-              <SinglePerson person={person} key={index} windowSize={windowSize}/>
+              <SinglePerson
+                person={person}
+                key={index}
+                windowSize={windowSize}
+                handleEditPersonData={handleEditPersonData}
+              />
             ))}
           </div>
         </div>
