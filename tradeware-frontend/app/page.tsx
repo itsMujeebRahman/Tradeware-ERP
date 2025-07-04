@@ -8,6 +8,7 @@ import Calender from "./components/Calender";
 import Graphs from "./components/Graphs";
 
 const page = () => {
+  
   return (
     <div
       className="w-full flex flex-col 

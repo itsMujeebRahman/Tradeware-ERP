@@ -17,6 +17,7 @@ body {
   :root {
     --background: #efefef;
     --foreground: #000000;
+    --primary : #212023;
     --backgroundBlack: #212023;
   }
 }
