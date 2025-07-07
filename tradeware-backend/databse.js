@@ -1,8 +1,10 @@
-const mongoose = require("mongoose");
+import mongoose from 'mongoose'
+import dotenv from 'dotenv'
+dotenv.config();
 
 const connectDB = async () => {
   try {
-    await mongoose.connect("mongodb://localhost:27017/TRADE_WARE");
+    await mongoose.connect(process.env.DB_CONFIG);
     console.log("MongoDB Connected Successfully");
   } catch (error) {
     console.log("Error Connecting to Database");
@@ -10,4 +12,4 @@ const connectDB = async () => {
   }
 };
 
-module.exports = connectDB;
+export default connectDB

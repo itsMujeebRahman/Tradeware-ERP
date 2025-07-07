@@ -44,7 +44,6 @@ const Customer = () => {
   const handleFetchPersonData = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setPersonData((Prev) => ({ ...Prev, [name]: value }));
-    console.log(personData);
   };
 
   const handleEditPersonData = (id: string) => {

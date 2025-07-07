@@ -1,7 +1,21 @@
 import { Bell, Settings, User2 } from "lucide-react";
 import React from "react";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const TitleBar = () => {
+  const router = useRouter();
+
+  
+  const handleLogout = () => {
+    Cookies.remove("token", { path: "/" });
+
+    toast.success("logged out successfully");
+
+    router.push("/login");
+  };
+
   return (
     <div
       className=" w-full h-fit shadow bg-[#e9e8eb]/50 border border-white flex items-center 
@@ -18,7 +32,7 @@ const TitleBar = () => {
             <Bell size={26} />
           </div>
           <div className="rounded-xl shadow p-2 bg-white">
-            <User2 size={26} />
+            <User2 size={26} onClick={handleLogout} />
           </div>
         </div>
       </div>

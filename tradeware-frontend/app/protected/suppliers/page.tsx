@@ -1,5 +1,5 @@
 import React from "react";
-import Supplier from "../components/Supplier";
+import Supplier from "../../components/Supplier";
 
 const page = () => {
   return (

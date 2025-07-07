@@ -17,14 +17,15 @@ interface props {
 }
 
 const NavbarLinks = [
-  { Link: "/", Icon: <LayoutDashboard />, Name: "Dashboard" },
-  { Link: "/customers", Icon: <Users />, Name: "Customers" },
-  { Link: "/suppliers", Icon: <Users />, Name: "Suppliers" },
-  { Link: "/products", Icon: <CherryIcon />, Name: "Products" },
-  { Link: "/purchase", Icon: <ShoppingCart />, Name: "Purchase" },
-  { Link: "/sales", Icon: <Receipt />, Name: "Sales" },
-  { Link: "/inventory", Icon: <ShoppingBag />, Name: "Inventory" },
-  { Link: "/reports", Icon: <Receipt />, Name: "Reports" },
+  { Link: "../protected/dashboard", Icon: <LayoutDashboard />, Name: "Dashboard" },
+  { Link: "../protected/customers", Icon: <Users />, Name: "Customers" },
+  { Link: "../protected/suppliers", Icon: <Users />, Name: "Suppliers" },
+  { Link: "../protected/products", Icon: <CherryIcon />, Name: "Products" },
+  { Link: "../protected/purchase", Icon: <ShoppingCart />, Name: "Purchase" },
+  { Link: "../protected/sales", Icon: <Receipt />, Name: "Sales" },
+  { Link: "../protected/inventory", Icon: <ShoppingBag />, Name: "Inventory" },
+  { Link: "../protected/reports", Icon: <Receipt />, Name: "Reports" },
+
 ];
 
 const Navbar = ({ navClose, setNavClose }: props) => {

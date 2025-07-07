@@ -1,7 +1,7 @@
 "use client";
 import type { Metadata } from "next";
-import "./globals.css";
-import Navbar from "./components/Navbar";
+import "../globals.css";
+import Navbar from "../components/Navbar";
 import { Toaster } from "react-hot-toast";
 import { useState } from "react";
 
@@ -16,6 +16,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const [navClose, setNavClose] = useState<boolean>(false);
+
+  const state = false;
   return (
     <html lang="en">
       <body className="flex h-screen w-screen gap-1 py-2 pr-2 !bg-[#212023]">
