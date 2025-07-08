@@ -8,7 +8,7 @@ export default function signUpLayout({
   return (
     <html lang="en">
       <body>
-        
+        <Toaster position="top-right" />
         {children}
       </body>
     </html>

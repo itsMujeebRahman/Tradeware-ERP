@@ -17,5 +17,5 @@ const UnitSchema = mongoose.Schema({
   },
 });
 
-const UnitModel = mongoose.Model("unit", UnitSchema);
+const UnitModel = mongoose.model("units", UnitSchema);
 export default UnitModel;

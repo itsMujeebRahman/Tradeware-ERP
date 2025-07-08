@@ -94,7 +94,7 @@ const Supplier = () => {
       ) : (
         ""
       )}
-      <div className=" flex items-center justify-between p-5 rounded-xl ">
+      <div className=" flex items-center justify-between p-4 rounded-xl ">
         <h1 className="font-bold text-2xl">Supplier Creation</h1>
         <div className="flex gap-2">
           <button
@@ -121,7 +121,7 @@ const Supplier = () => {
         </div>
       </div>
       <div className=" rounded-xl h-[84vh] columns-3 backdrop-blur-xl bg-white border border-gray-300 py-5 ">
-        <div className="px-5 flex flex-col gap-2 break-inside-avoid ">
+        <div className="px-5 flex flex-col gap-3 break-inside-avoid ">
           {["Name", "Address", "Phone", "Email", "TaxNo", "Notes"].map(
             (inputName, index) => (
               <InputFields

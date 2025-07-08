@@ -17,7 +17,7 @@ interface props {
 }
 
 const NavbarLinks = [
-  { Link: "../protected/dashboard", Icon: <LayoutDashboard />, Name: "Dashboard" },
+  { Link: "../protected", Icon: <LayoutDashboard />, Name: "Dashboard" },
   { Link: "../protected/customers", Icon: <Users />, Name: "Customers" },
   { Link: "../protected/suppliers", Icon: <Users />, Name: "Suppliers" },
   { Link: "../protected/products", Icon: <CherryIcon />, Name: "Products" },

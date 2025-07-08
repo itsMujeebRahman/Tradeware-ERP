@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
 
-import TitleBar from "../../components/TitleBar";
-import Overview from "../../components/Overview";
-import Statistics from "../../components/Statistics";
-import Calender from "../../components/Calender";
-import Graphs from "../../components/Graphs";
+import TitleBar from "../components/TitleBar";
+import Overview from "../components/Overview";
+import Statistics from "../components/Statistics";
+import Calender from "../components/Calender";
+import Graphs from "../components/Graphs";
 
 const page = () => {
   const state = true;

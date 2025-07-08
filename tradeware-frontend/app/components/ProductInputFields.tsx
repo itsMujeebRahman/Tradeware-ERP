@@ -1,10 +1,60 @@
-import React from "react";
+interface Unit {
+  Name: string;
+  Code: string;
+  Symbol: string;
+}
+
+interface Category {
+  Name: string;
+  Code: string;
+  Description: string;
+}
+
+interface product {
+  Name: string;
+  Code: string;
+  Barcode: string;
+  Category: string;
+  Unit: string;
+  Cost: string;
+  SellPrice: number;
+  MaxSellPrice: number;
+  Quantity: number;
+  TaxPercentage: string;
+  Description: string;
+}
 
 interface props {
   inputName: string;
+  cat: Category[];
+  uni: Unit[];
+  productDetails: product;
+  handleProductsData: any;
+  editData: boolean;
 }
 
-const ProductInputFields = ({ inputName }: props) => {
+const changeValue: Record<string, keyof product> = {
+  Name: "Name",
+  Code: "Code",
+  Barcode: "Barcode",
+  Category: "Category",
+  Unit: "Unit",
+  Cost: "Cost",
+  SellPrice: "SellPrice",
+  MaxSellPrice: "MaxSellPrice",
+  Quantity: "Quantity",
+  Description: "Description",
+  "Tax Percentage": "TaxPercentage",
+};
+
+const ProductInputFields = ({
+  inputName,
+  uni,
+  cat,
+  productDetails,
+  handleProductsData,
+  editData,
+}: props) => {
   return (
     <div>
       {[
@@ -15,18 +65,64 @@ const ProductInputFields = ({ inputName }: props) => {
         "SellPrice",
         "MaxSellPrice",
         "Quantity",
-        "TaxPercentage",
+        "Tax Percentage",
       ].includes(inputName) ? (
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col ">
           <p className="text-sm ">{inputName}</p>
           <input
-            className={`border border-gray-300 focus:outline-gray-400 p-1 rounded bg-white `}
+            className={`border border-gray-300 focus:outline-gray-400 p-1 rounded bg-white 
+              ${editData ? " border-gray-500" : "  border-gray-300"}`}
+            name={changeValue[inputName]}
+            value={productDetails[changeValue[inputName]]}
+            onChange={handleProductsData}
+            disabled={!editData}
           />
         </div>
-      ) : ["category", "Unit"].includes(inputName) ? (
-        <div>category</div>
+      ) : ["Category"].includes(inputName) ? (
+        <div className="flex flex-col ">
+          <p className="text-sm ">{inputName}</p>
+          <select
+            className={`border border-gray-300 focus:outline-gray-400 p-2 rounded bg-white 
+              ${editData ? " border-gray-500" : "  border-gray-300"}`}
+            name={changeValue[inputName]}
+            value={productDetails[changeValue[inputName]]}
+            onChange={handleProductsData}
+            disabled={!editData}
+          >
+            {cat?.map((c, index) => (
+              <option key={index}>{c.Name}</option>
+            ))}
+          </select>
+        </div>
+      ) : ["Unit"].includes(inputName) ? (
+        <div className="flex flex-col ">
+          <p className="text-sm ">{inputName}</p>
+          <select
+            className={`border border-gray-300 focus:outline-gray-400 p-2 rounded bg-white 
+              ${editData ? " border-gray-500" : "  border-gray-300"}`}
+            name={changeValue[inputName]}
+            value={productDetails[changeValue[inputName]]}
+            onChange={handleProductsData}
+            disabled={!editData}
+          >
+            {uni?.map((u, index) => (
+              <option key={index}>{u.Name}</option>
+            ))}
+          </select>
+        </div>
       ) : "Description" === inputName ? (
-        <textarea className="border h-[20vh]" />
+        <div className="flex flex-col ">
+          <p className="text-sm ">{inputName}</p>
+          <textarea
+            className={`border focus:outline-gray-400 p-1 rounded bg-white 
+          h-[20vh] w-full resize-none border-gray-300 
+          ${editData ? " border-gray-500" : "  border-gray-300"}`}
+            name={changeValue[inputName]}
+            value={productDetails[changeValue[inputName]]}
+            onChange={handleProductsData}
+            disabled={!editData}
+          />
+        </div>
       ) : (
         ""
       )}

@@ -39,7 +39,7 @@ const InputFields = ({
   return (
     <div>
       {["Name", "Phone", "Email", "TaxNo"].includes(inputName) ? (
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col ">
           <p className="text-sm ">{inputName}</p>
           <input
             className={`border focus:outline-gray-400 p-1 rounded bg-white ${
@@ -83,7 +83,7 @@ const InputFields = ({
           />
         </div>
       ) : inputName === "Notes" ? (
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col">
           <p className="text-sm">{inputName}</p>
           <textarea
             className={` border focus:outline-gray-400 p-1 rounded bg-white 
