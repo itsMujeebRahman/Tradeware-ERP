@@ -7,13 +7,10 @@ import toast from "react-hot-toast";
 const TitleBar = () => {
   const router = useRouter();
 
-  
   const handleLogout = () => {
     Cookies.remove("token", { path: "/" });
-
     toast.success("logged out successfully");
-
-    router.push("/login");
+    router.refresh();
   };
 
   return (

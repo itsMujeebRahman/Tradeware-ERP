@@ -30,7 +30,8 @@ const Page = () => {
         path: "/",
       });
 
-      router.push("../protected/");
+      router.push("/protected");
+      
     } catch (error: any) {
       toast.error(error.response?.data?.error || "Something went wrong");
     }

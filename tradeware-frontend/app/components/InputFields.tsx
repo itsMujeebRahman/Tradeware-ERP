@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 
 interface person {
   Name: string;
@@ -11,11 +11,10 @@ interface person {
   Notes: string;
   _id: string;
 }
-
 interface props {
   inputName: string;
-  handleFetchPersonData: any;
-  personData: person;
+  handleCollectDetails: any;
+  personDetails: person;
   editData: boolean;
 }
 
@@ -32,8 +31,8 @@ const changeValue: Record<string, keyof person> = {
 
 const InputFields = ({
   inputName,
-  handleFetchPersonData,
-  personData,
+  handleCollectDetails,
+  personDetails,
   editData,
 }: props) => {
   return (
@@ -46,8 +45,8 @@ const InputFields = ({
               editData ? " border-gray-500" : "  border-gray-300"
             }`}
             name={changeValue[inputName]}
-            onChange={handleFetchPersonData}
-            value={personData[changeValue[inputName]] || ""}
+            onChange={handleCollectDetails}
+            value={personDetails[changeValue[inputName]] || ""}
             disabled={!editData}
           />
         </div>
@@ -59,8 +58,8 @@ const InputFields = ({
               editData ? " border-gray-500" : "  border-gray-300"
             }`}
             name={changeValue[inputName + 1]}
-            onChange={handleFetchPersonData}
-            value={personData[changeValue[inputName + 1]] || ""}
+            onChange={handleCollectDetails}
+            value={personDetails[changeValue[inputName + 1]] || ""}
             disabled={!editData}
           />
           <input
@@ -68,8 +67,8 @@ const InputFields = ({
               editData ? " border-gray-500" : "  border-gray-300"
             }`}
             name={changeValue[inputName + 2]}
-            onChange={handleFetchPersonData}
-            value={personData[changeValue[inputName + 2]] || ""}
+            onChange={handleCollectDetails}
+            value={personDetails[changeValue[inputName + 2]] || ""}
             disabled={!editData}
           />
           <input
@@ -77,12 +76,12 @@ const InputFields = ({
               editData ? " border-gray-500" : "  border-gray-300"
             }`}
             name={changeValue[inputName + 3]}
-            onChange={handleFetchPersonData}
-            value={personData[changeValue[inputName + 3]] || ""}
+            onChange={handleCollectDetails}
+            value={personDetails[changeValue[inputName + 3]] || ""}
             disabled={!editData}
           />
         </div>
-      ) : inputName === "Notes" ? (
+      ) : ["Notes"].includes(inputName) ? (
         <div className="flex flex-col">
           <p className="text-sm">{inputName}</p>
           <textarea
@@ -91,8 +90,8 @@ const InputFields = ({
             editData ? " border-gray-500" : " border-gray-300"
           }`}
             name={changeValue[inputName]}
-            onChange={handleFetchPersonData}
-            value={personData[changeValue[inputName]] || ""}
+            onChange={handleCollectDetails}
+            value={personDetails[changeValue[inputName]] || ""}
             disabled={!editData}
           />
         </div>

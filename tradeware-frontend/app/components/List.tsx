@@ -1,6 +1,6 @@
 import { FullscreenIcon, X } from "lucide-react";
 import React, { useState } from "react";
-import SinglePerson from "./SinglePerson";
+import SingleListObject from "./SingleListObject";
 
 interface person {
   Name: string;
@@ -26,22 +26,24 @@ interface product {
   Quantity: number;
   TaxPercentage: string;
   Description: string;
+  _id: string;
 }
 
-interface props {
-  setEnableList: React.Dispatch<React.SetStateAction<boolean>>;
-  data: person[];
-  pro: product[];
-  handleEditPersonData: (id: string) => void;
-  isProduct: boolean;
-}
+type props =
+  | {
+      isProduct: true;
+      setEnableList: React.Dispatch<React.SetStateAction<boolean>>;
+      data: product[];
+      handleEditDetails: (id: string) => void;
+    }
+  | {
+      isProduct: false;
+      setEnableList: React.Dispatch<React.SetStateAction<boolean>>;
+      data: person[];
+      handleEditDetails: (id: string) => void;
+    };
 
-const List = ({
-  setEnableList,
-  data,
-  handleEditPersonData,
-  isProduct,
-}: props) => {
+const List = ({ setEnableList, data, handleEditDetails, isProduct }: props) => {
   const [windowSize, setWindowSize] = useState<boolean>(false);
   return (
     <div className="fixed top-0 left-0 h-screen w-screen flex items-center justify-center bg-black/30 z-50 p-4">
@@ -132,15 +134,33 @@ const List = ({
             className=" h-full  flex flex-col gap-1 p-1 bg-black/2 border border-gray-300 
           overflow-y-scroll rounded-b-xl"
           >
-            {data.map((person, index) => (
-              <SinglePerson
-                person={person}
-                key={index}
-                windowSize={windowSize}
-                handleEditPersonData={handleEditPersonData}
-                isProduct={isProduct}
-              />
-            ))}
+            {isProduct ? (
+              <>
+                {" "}
+                {data?.map((object, index) => (
+                  <SingleListObject
+                    object={object}
+                    key={index}
+                    windowSize={windowSize}
+                    handleEditDetails={handleEditDetails}
+                    isProduct={true}
+                  />
+                ))}
+              </>
+            ) : (
+              <>
+                {" "}
+                {data?.map((object, index) => (
+                  <SingleListObject
+                    object={object}
+                    key={index}
+                    windowSize={windowSize}
+                    handleEditDetails={handleEditDetails}
+                    isProduct={false}
+                  />
+                ))}
+              </>
+            )}
           </div>
         </div>
       </div>

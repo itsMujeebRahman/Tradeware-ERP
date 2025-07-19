@@ -4,9 +4,10 @@ import Category from "./Category";
 import Unit from "./Unit";
 import axios from "axios";
 import useSWR from "swr";
-import React, { ChangeEvent, ReactElement, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import toast from "react-hot-toast";
 import List from "./List";
+
 
 interface product {
   Name: string;
@@ -20,6 +21,7 @@ interface product {
   Quantity: number;
   TaxPercentage: string;
   Description: string;
+  _id: string;
 }
 
 const dataRest: product = {
@@ -34,47 +36,93 @@ const dataRest: product = {
   Quantity: 0,
   TaxPercentage: "",
   Description: "",
+  _id: "",
 };
 
 const Customer = () => {
   const [enableCategory, setEnableCategory] = useState<boolean>(false);
   const [enableUnit, setEnableUnit] = useState<boolean>(false);
-  const [editData, setEditData] = useState<boolean>(false);
-  const [productDetails, setproductDetails] = useState<product>(dataRest);
+  const [editDetails, setEditDetails] = useState<boolean>(true);
+  const [productDetails, setProductDetails] = useState<product>(dataRest);
   const [enableList, setEnableList] = useState<boolean>(false);
   const [isProduct, setIsProduct] = useState<boolean>(false);
+  const [addDetails, setAddDetails] = useState<boolean>(true);
+  const [productId, setProductId] = useState<string>("");
 
   const fetcher = (url: string) => axios.get(url).then((res) => res.data);
   const { data: cat } = useSWR("http://localhost:3001/category", fetcher);
   const { data: uni } = useSWR("http://localhost:3001/unit", fetcher);
-  const { data } = useSWR("http://localhost:3001/product", fetcher);
+  const { data, mutate } = useSWR("http://localhost:3001/product", fetcher);
+
+  const noData = Object.values(productDetails).every(
+    (val) => val === "" || val === 0
+  );
 
   const handleProductList = () => {
     setIsProduct(true);
     setEnableList(true);
   };
 
-  const handleProductsData = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleCancelButton = () => {
+    setProductDetails(dataRest);
+    setAddDetails(true);
+    setEditDetails(true);
+    console.log(productDetails);
+  };
+
+  const handleCollectProductDetails = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setproductDetails((Prev) => ({ ...Prev, [name]: value }));
+    setProductDetails((Prev) => ({ ...Prev, [name]: value }));
+  };
+
+  const handleEditProductDetails = (id: string) => {
+    setEnableList(false);
+    setEditDetails(false);
+    setAddDetails(false);
+    setProductDetails(data.find((pro: product) => pro._id === id));
+    setProductId(id);
   };
 
   const handleSendProductDetails = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:3001/product",
-        productDetails
-      );
-      toast.success(response.data.message);
-    } catch (error: any) {
-      toast.error(error.resposne?.data?.error);
+    if (addDetails) {
+      if (productDetails.Name.trim() === "") {
+        toast.error("Product Name Needed");
+      }
+      try {
+        const response = await axios.post(
+          "http://localhost:3001/product",
+          productDetails
+        );
+        toast.success(response.data.message);
+      } catch (error: any) {
+        toast.error(error.resposne?.data?.error);
+      }
+      mutate();
+      setProductDetails(dataRest);
+    } else {
+      try {
+        const response = await axios.post(
+          `http://localhost:3001/product/${productId}`,
+          productDetails
+        );
+        toast.success(response.data.message);
+      } catch (error: any) {
+        toast.error(error.resposne?.data?.error);
+      }
+      mutate();
+      setProductDetails(dataRest);
     }
   };
 
   return (
     <div className="h-full flex flex-col gap-2 ">
       {enableList ? (
-        <List data={data} isProduct={isProduct} setEnableList={setEnableList} />
+        <List
+          data={data}
+          isProduct={isProduct}
+          setEnableList={setEnableList}
+          handleEditDetails={handleEditProductDetails}
+        />
       ) : (
         ""
       )}
@@ -104,7 +152,7 @@ const Customer = () => {
           <div className="flex gap-2 border-l border-gray-400 pl-5">
             <button
               className="bg-gray-600  p-2 w-20 text-white rounded"
-              onClick={() => setEditData(!editData)}
+              onClick={() => setEditDetails(true)}
             >
               Edit
             </button>
@@ -115,12 +163,18 @@ const Customer = () => {
               List
             </button>
             <button
-              className="bg-gray-600  p-2 w-20 text-white rounded"
+              className={`${
+                noData ? "bg-gray-500" : "bg-gray-600"
+              }  p-2 w-20 text-white rounded`}
               onClick={handleSendProductDetails}
+              disabled={noData}
             >
               Save
             </button>
-            <button className="bg-gray-600  p-2 w-20 text-white rounded">
+            <button
+              className="bg-gray-600  p-2 w-20 text-white rounded"
+              onClick={handleCancelButton}
+            >
               Cancel
             </button>
           </div>
@@ -146,9 +200,9 @@ const Customer = () => {
               inputName={inputName}
               cat={cat}
               uni={uni}
-              handleProductsData={handleProductsData}
+              handleCollectDetails={handleCollectProductDetails}
               productDetails={productDetails}
-              editData={editData}
+              editDetails={editDetails}
             />
           ))}
         </div>

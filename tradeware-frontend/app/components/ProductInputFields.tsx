@@ -29,8 +29,8 @@ interface props {
   cat: Category[];
   uni: Unit[];
   productDetails: product;
-  handleProductsData: any;
-  editData: boolean;
+  handleCollectDetails: any;
+  editDetails: boolean;
 }
 
 const changeValue: Record<string, keyof product> = {
@@ -52,8 +52,8 @@ const ProductInputFields = ({
   uni,
   cat,
   productDetails,
-  handleProductsData,
-  editData,
+  handleCollectDetails,
+  editDetails,
 }: props) => {
   return (
     <div>
@@ -71,11 +71,11 @@ const ProductInputFields = ({
           <p className="text-sm ">{inputName}</p>
           <input
             className={`border border-gray-300 focus:outline-gray-400 p-1 rounded bg-white 
-              ${editData ? " border-gray-500" : "  border-gray-300"}`}
+              ${editDetails ? " border-gray-500" : "  border-gray-300"}`}
             name={changeValue[inputName]}
             value={productDetails[changeValue[inputName]]}
-            onChange={handleProductsData}
-            disabled={!editData}
+            onChange={handleCollectDetails}
+            disabled={!editDetails}
           />
         </div>
       ) : ["Category"].includes(inputName) ? (
@@ -83,11 +83,11 @@ const ProductInputFields = ({
           <p className="text-sm ">{inputName}</p>
           <select
             className={`border border-gray-300 focus:outline-gray-400 p-2 rounded bg-white 
-              ${editData ? " border-gray-500" : "  border-gray-300"}`}
+              ${editDetails ? " border-gray-500" : "  border-gray-300"}`}
             name={changeValue[inputName]}
             value={productDetails[changeValue[inputName]]}
-            onChange={handleProductsData}
-            disabled={!editData}
+            onChange={handleCollectDetails}
+            disabled={!editDetails}
           >
             {cat?.map((c, index) => (
               <option key={index}>{c.Name}</option>
@@ -99,11 +99,11 @@ const ProductInputFields = ({
           <p className="text-sm ">{inputName}</p>
           <select
             className={`border border-gray-300 focus:outline-gray-400 p-2 rounded bg-white 
-              ${editData ? " border-gray-500" : "  border-gray-300"}`}
+              ${editDetails ? " border-gray-500" : "  border-gray-300"}`}
             name={changeValue[inputName]}
             value={productDetails[changeValue[inputName]]}
-            onChange={handleProductsData}
-            disabled={!editData}
+            onChange={handleCollectDetails}
+            disabled={!editDetails}
           >
             {uni?.map((u, index) => (
               <option key={index}>{u.Name}</option>
@@ -116,11 +116,11 @@ const ProductInputFields = ({
           <textarea
             className={`border focus:outline-gray-400 p-1 rounded bg-white 
           h-[20vh] w-full resize-none border-gray-300 
-          ${editData ? " border-gray-500" : "  border-gray-300"}`}
+          ${editDetails ? " border-gray-500" : "  border-gray-300"}`}
             name={changeValue[inputName]}
             value={productDetails[changeValue[inputName]]}
-            onChange={handleProductsData}
-            disabled={!editData}
+            onChange={handleCollectDetails}
+            disabled={!editDetails}
           />
         </div>
       ) : (

@@ -33,7 +33,7 @@ const dataReset: person = {
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 const Customer = () => {
-  const [personData, setPersonData] = useState<person>(dataReset);
+  const [customerDetails, setCustomerDetails] = useState<person>(dataReset);
   const [enableList, setEnableList] = useState<boolean>(false);
   const [editData, setEditData] = useState<boolean>(true);
   const [addData, setAddData] = useState<boolean>(true);
@@ -41,44 +41,44 @@ const Customer = () => {
 
   const { data, mutate } = useSWR("http://localhost:3001/customer", fetcher);
 
-  const handleFetchPersonData = (
+  const handleCollectCustomerDetails = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setPersonData((Prev) => ({ ...Prev, [name]: value }));
+    setCustomerDetails((Prev) => ({ ...Prev, [name]: value }));
   };
 
-  const handleEditPersonData = (id: string) => {
+  const handleEditCustomerDetails = (id: string) => {
     setEnableList(false);
-    setPersonData(data.find((sup: person) => sup._id === id));
+    setCustomerDetails(data.find((sup: person) => sup._id === id));
     setAddData(false);
     setEditData(false);
     setCustomerId(id);
   };
 
-  const handleSendCustomerData = async (customerId: string) => {
+  const handleSendCustomerDetails = async (customerId: string) => {
     if (addData) {
-      const { _id, ...customerPayload } = personData;
+      const { _id, ...customerPayload } = customerDetails;
       try {
         await axios.post("http://localhost:3001/customer", customerPayload);
-        toast.success(`${personData.Name}'s Data Saved`);
+        toast.success(`${customerDetails.Name}'s Data Saved`);
       } catch {
-        toast.error(`Error while Saving ${personData.Name}'s Data `);
+        toast.error(`Error while Saving ${customerDetails.Name}'s Data `);
       }
-      setPersonData(dataReset);
+      setCustomerDetails(dataReset);
       mutate();
     } else {
       try {
         await axios.post(
           `http://localhost:3001/customer/${customerId}`,
-          personData
+          customerDetails
         );
-        toast.success(`${personData.Name}'s Data Saved`);
+        toast.success(`${customerDetails.Name}'s Data Saved`);
       } catch {
-        toast.error(`Error while Saving ${personData.Name}'s Data `);
+        toast.error(`Error while Saving ${customerDetails.Name}'s Data `);
       }
     }
-    setPersonData(dataReset);
+    setCustomerDetails(dataReset);
     setAddData(true);
     mutate();
   };
@@ -89,7 +89,7 @@ const Customer = () => {
         <List
           setEnableList={setEnableList}
           data={data}
-          handleEditPersonData={handleEditPersonData}
+          handleEditDetails={handleEditCustomerDetails}
         />
       ) : (
         ""
@@ -111,7 +111,7 @@ const Customer = () => {
           </button>
           <button
             className="bg-gray-600  p-2 w-20 text-white rounded"
-            onClick={() => handleSendCustomerData(data._id)}
+            onClick={() => handleSendCustomerDetails(data._id)}
           >
             Save
           </button>
@@ -127,8 +127,8 @@ const Customer = () => {
               <InputFields
                 key={index}
                 inputName={inputName}
-                handleFetchPersonData={handleFetchPersonData}
-                personData={personData}
+                handleCollectDetails={handleCollectCustomerDetails}
+                personDetails={customerDetails}
                 editData={editData}
               />
             )

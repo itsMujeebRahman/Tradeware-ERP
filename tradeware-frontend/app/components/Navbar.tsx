@@ -25,7 +25,6 @@ const NavbarLinks = [
   { Link: "../protected/sales", Icon: <Receipt />, Name: "Sales" },
   { Link: "../protected/inventory", Icon: <ShoppingBag />, Name: "Inventory" },
   { Link: "../protected/reports", Icon: <Receipt />, Name: "Reports" },
-
 ];
 
 const Navbar = ({ navClose, setNavClose }: props) => {

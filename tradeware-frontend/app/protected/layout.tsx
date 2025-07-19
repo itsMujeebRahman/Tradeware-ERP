@@ -20,7 +20,7 @@ export default function RootLayout({
   const state = false;
   return (
     <html lang="en">
-      <body className="flex h-screen w-screen gap-1 py-2 pr-2 !bg-[#212023]">
+      <body className="flex h-screen w-screen gap-1 p-[0.5vw] !bg-[#212023]">
         <Toaster position="top-right" />
         <Navbar setNavClose={setNavClose} navClose={navClose} />
         {children}

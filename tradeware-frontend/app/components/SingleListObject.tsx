@@ -31,21 +31,21 @@ interface product {
 type props =
   | {
       isProduct: true;
-      person: product;
+      object: product;
       windowSize: boolean;
-      handleEditPersonData: (id: string) => void;
+      handleEditDetails: (id: string) => void;
     }
   | {
       isProduct: false;
-      person: person;
+      object: person;
       windowSize: boolean;
-      handleEditPersonData: (id: string) => void;
+      handleEditDetails: (id: string) => void;
     };
 
-const SinglePerson = ({
-  person,
+const SingleListObject = ({
+  object,
   windowSize,
-  handleEditPersonData,
+  handleEditDetails,
   isProduct,
 }: props) => {
   return (
@@ -55,38 +55,38 @@ const SinglePerson = ({
           className={`${
             isProduct ? "grid grid-cols-8" : "grid grid-cols-7"
           } p-2 gap-2 shadow rounded-xl bg-white`}
-          onClick={() => handleEditPersonData(person._id)}
+          onClick={() => handleEditDetails(object._id)}
         >
           {isProduct ? (
             <>
-              <span className="border-r border-r-gray-300">{person.Name}</span>
-              <span className="border-r border-r-gray-300">{person.Code}</span>
+              <span className="border-r border-r-gray-300">{object.Name}</span>
+              <span className="border-r border-r-gray-300">{object.Code}</span>
               <span className="border-r border-r-gray-300">
-                {person.Category}
+                {object.Category}
               </span>
-              <span className="border-r border-r-gray-300">{person.Unit}</span>
+              <span className="border-r border-r-gray-300">{object.Unit}</span>
               <span className="border-r border-r-gray-300">
-                {person.Quantity}
+                {object.Quantity}
               </span>
-              <span className="border-r border-r-gray-300">{person.Cost}</span>
+              <span className="border-r border-r-gray-300">{object.Cost}</span>
               <span className="border-r border-r-gray-300">
-                {person.SellPrice}
+                {object.SellPrice}
               </span>
-              <span className="break-all">{person.TaxPercentage}</span>
+              <span className="break-all">{object.TaxPercentage}</span>
             </>
           ) : (
             <>
-              <span className="border-r border-r-gray-300">{person.Name}</span>
+              <span className="border-r border-r-gray-300">{object.Name}</span>
               <span className="border-r border-r-gray-300">
-                {person.Address1}
+                {object.Address1}
               </span>
               <span className="border-r border-r-gray-300">
-                {person.Address2}
+                {object.Address2}
               </span>
-              <span className="border-r border-r-gray-300">{person.Phone}</span>
-              <span className="border-r border-r-gray-300">{person.Email}</span>
-              <span className="border-r border-r-gray-300">{person.TaxNo}</span>
-              <span className="break-all">{person.Notes}</span>
+              <span className="border-r border-r-gray-300">{object.Phone}</span>
+              <span className="border-r border-r-gray-300">{object.Email}</span>
+              <span className="border-r border-r-gray-300">{object.TaxNo}</span>
+              <span className="break-all">{object.Notes}</span>
             </>
           )}
         </div>
@@ -95,28 +95,28 @@ const SinglePerson = ({
           className={`${
             isProduct ? "grid grid-cols-5" : "grid grid-cols-4"
           } p-2 gap-2 shadow rounded-xl bg-white`}
-          onClick={() => handleEditPersonData(person._id)}
+          onClick={() => handleEditDetails(object._id)}
         >
           {isProduct ? (
             <>
-              <span className="border-r border-r-gray-300">{person.Name}</span>
+              <span className="border-r border-r-gray-300">{object.Name}</span>
               <span className="border-r border-r-gray-300">
-                {person.Category}
+                {object.Category}
               </span>
               <span className="border-r border-r-gray-300">
-                {person.Quantity}
+                {object.Quantity}
               </span>
-              <span className="border-r border-r-gray-300">{person.Cost}</span>
-              <span>{person.SellPrice}</span>
+              <span className="border-r border-r-gray-300">{object.Cost}</span>
+              <span>{object.SellPrice}</span>
             </>
           ) : (
             <>
-              <span className="border-r border-r-gray-300">{person.Name}</span>
+              <span className="border-r border-r-gray-300">{object.Name}</span>
               <span className="border-r border-r-gray-300">
-                {person.Address1}
+                {object.Address1}
               </span>
-              <span className="border-r border-r-gray-300">{person.Phone}</span>
-              <span>{person.Email}</span>
+              <span className="border-r border-r-gray-300">{object.Phone}</span>
+              <span>{object.Email}</span>
             </>
           )}
         </div>
@@ -125,4 +125,4 @@ const SinglePerson = ({
   );
 };
 
-export default SinglePerson;
+export default SingleListObject;
