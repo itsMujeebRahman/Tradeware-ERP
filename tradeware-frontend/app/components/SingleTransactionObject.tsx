@@ -1,6 +1,7 @@
-import { Trash2 } from "lucide-react";
+import { Trash } from "lucide-react";
 
 interface productData {
+  FrontId: number;
   Name: string;
   Code: string;
   Barcode: string;
@@ -12,6 +13,7 @@ interface productData {
 }
 
 const changeValue: Record<string, keyof productData> = {
+  FrontId: "FrontId",
   Name: "Name",
   Code: "Code",
   Barcode: "Barcode",
@@ -23,10 +25,18 @@ const changeValue: Record<string, keyof productData> = {
 };
 
 interface props {
-  handleCollectProductData: any;
-  productData: productData;
-}
+  productData?: productData;
+  handlDeleteProduct?: (id: number) => void;
+  handleCollectProductData: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => void;
 
+  handleNextLine: (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    name: string
+  ) => void;
+}
 const fieldData = [
   {
     Name: "Code",
@@ -65,22 +75,33 @@ const fieldData = [
 const SingleTransactionObject = ({
   productData,
   handleCollectProductData,
+  handleNextLine,
+  handlDeleteProduct,
 }: props) => {
+  if (!productData) {
+    return null;
+  }
   return (
-    <div className="grid grid-cols-34 shadow bg-white rounded items-center">
+    <div className={`grid grid-cols-34 shadow bg-white rounded items-center`}>
       {fieldData.map((data, index) => (
         <input
           className={`text-[1vw] h-[4vh] focus:outline-gray-400 col-span-${data.Span} pl-[0.3vw]`}
+          key={index}
           name={changeValue[data.Name]}
           value={productData[changeValue[data.Name]]}
-          onChange={handleCollectProductData}
-          key={index}
+          onChange={(e) => handleCollectProductData(e, productData.FrontId)}
+          onKeyDown={(e) => handleNextLine(e, changeValue[data.Name])}
         />
       ))}
-
-      <span className="col-span-1 pl-[0.3vw] flex item-center justify-center">
-        <Trash2 className="text-red-400 h-[2vh] w-[2vw]" />
-      </span>
+      {handlDeleteProduct && (
+        <div className="col-span-1 flex justify-center">
+          <Trash
+            className="text-red-400"
+            size={18}
+            onClick={() => handlDeleteProduct(productData.FrontId)}
+          />
+        </div>
+      )}
     </div>
   );
 };

@@ -1,7 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TransactionInputField from "./TransactionInputField";
 import SingleTransactionObject from "./SingleTransactionObject";
+import toast from "react-hot-toast";
 
 interface invoiceDetails {
   Name: string;
@@ -16,6 +17,7 @@ interface invoiceDetails {
 }
 
 interface productData {
+  FrontId: number;
   Name: string;
   Code: string;
   Barcode: string;
@@ -27,6 +29,7 @@ interface productData {
 }
 
 const DataReset: productData = {
+  FrontId: 0,
   Name: "",
   Code: "",
   Barcode: "",
@@ -38,23 +41,45 @@ const DataReset: productData = {
 };
 
 const Purchase = () => {
-  const [addField, setAddField] = useState<number[]>([1]);
-  const [productData, setproductData] = useState<productData>(DataReset);
-  const [productDetails, setProductDetails] = useState<productData[]>();
-  const [invoiceData, setInvoiceData] = useState<invoiceDetails>();
+  const [productDetails, setProductDetails] = useState<productData[]>([
+    { ...DataReset, FrontId: 1 },
+  ]);
 
-  const handleCollectProductData = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCollectProductData = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    id: number
+  ) => {
     const { name, value } = e.target;
-    setproductData((Prev) => ({ ...Prev, [name]: value }));
+    setProductDetails((Prev) =>
+      Prev.map((item, i) => (i + 1 === id ? { ...item, [name]: value } : item))
+    );
+  };
 
-    if (productData.NetTotal.toString().length === 2) {
-      setAddField((Prev) => [...Prev, Prev.length]);
+  const handleNextLine = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    name: string
+  ) => {
+    if (e.key === "Enter" && name === "NetTotal") {
+      setProductDetails((Prev) => [
+        ...Prev,
+        {
+          ...DataReset,
+          FrontId: productDetails.length + 1,
+        },
+      ]);
     }
   };
 
-  const handleAddProductToCollection = () => {
-    setProductDetails((Prev) => [...(Prev || []), productData]);
-    setproductData(DataReset);
+  const handlDeleteProduct = (id: number) => {
+    console.log("length ", productDetails.length);
+    console.log("id ", id);
+    if (productDetails.length === id) {
+      toast.error("not able to delete");
+    } else {
+      setProductDetails((Prev: productData[]) =>
+        Prev.filter((item) => item.FrontId !== id)
+      );
+    }
   };
 
   return (
@@ -68,10 +93,7 @@ const Purchase = () => {
           <button className="bg-gray-600  w-[5vw] h-[5vh] text-white rounded text-[1vw]">
             List
           </button>
-          <button
-            className="bg-gray-600  w-[5vw] h-[5vh] text-white rounded text-[1vw]"
-            onClick={handleAddProductToCollection}
-          >
+          <button className="bg-gray-600  w-[5vw] h-[5vh] text-white rounded text-[1vw]">
             Save
           </button>
           <button className="bg-gray-600  w-[5vw] h-[5vh] text-white rounded text-[1vw]">
@@ -132,21 +154,20 @@ const Purchase = () => {
             className="rounded-b-xl  border border-gray-300 h-45/50 p-[0.3vw] bg-gray-100 
           flex flex-col gap-[0.3vw] overflow-y-scroll"
           >
-            {addField.map((num, index) => (
+            {productDetails.map((product, index) => (
               <SingleTransactionObject
-                key={index}
+                handlDeleteProduct={handlDeleteProduct}
                 handleCollectProductData={handleCollectProductData}
-                productData={productData}
+                handleNextLine={handleNextLine}
+                productData={product}
+                key={index}
               />
             ))}
 
-            {addField.map((num, index) => (
-              <SingleTransactionObject
-                key={index}
-                handleCollectProductData={handleCollectProductData}
-                productData={productData}
-              />
-            ))}
+            <SingleTransactionObject
+              handleCollectProductData={handleCollectProductData}
+              handleNextLine={handleNextLine}
+            />
           </div>
         </div>
       </div>
