@@ -1,20 +1,33 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import TransactionInputField from "./TransactionInputField";
 import SingleTransactionObject from "./SingleTransactionObject";
+import axios from "axios";
 import toast from "react-hot-toast";
+import useSWR from "swr";
+import { Button } from "@/components/ui/button";
 
-interface invoiceDetails {
+interface headerData {
   Name: string;
   Address1: string;
   Address2: string;
   InvoiceNo: string;
   ReferenceNo: string;
   Date: string;
-  PaymentMthod: string;
+  PaymentMethod: string;
   Notes: string;
-  productDetails: productData[];
 }
+
+const headReset: headerData = {
+  Name: "",
+  Address1: "",
+  Address2: "",
+  InvoiceNo: "",
+  ReferenceNo: "",
+  Date: "",
+  PaymentMethod: "",
+  Notes: "",
+};
 
 interface productData {
   FrontId: number;
@@ -40,10 +53,37 @@ const DataReset: productData = {
   NetTotal: 0,
 };
 
+const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+
 const Purchase = () => {
   const [productDetails, setProductDetails] = useState<productData[]>([
     { ...DataReset, FrontId: 1 },
   ]);
+
+  const [headerData, setHeaderData] = useState<headerData>(headReset);
+
+  const { data, mutate } = useSWR("http://localhost:3001/supplier", fetcher);
+
+  const handleSendInvoiceData = async () => {
+    try {
+      const response = await axios.post("http://localhost:3001/purchase", {
+        productDetails,
+        headerData,
+      });
+      toast.success(response.data.message);
+    } catch (error: any) {
+      toast.error(error.resposne?.data?.error);
+    }
+    setProductDetails([{ ...DataReset, FrontId: 1 }]);
+    // setHeaderData(headReset);
+  };
+
+  const handlecollectHeaderData = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setHeaderData((Prev) => ({ ...Prev, [name]: value }));
+  };
 
   const handleCollectProductData = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -71,34 +111,30 @@ const Purchase = () => {
   };
 
   const handlDeleteProduct = (id: number) => {
-    console.log("length ", productDetails.length);
-    console.log("id ", id);
-    if (productDetails.length === id) {
-      toast.error("not able to delete");
-    } else {
-      setProductDetails((Prev: productData[]) =>
-        Prev.filter((item) => item.FrontId !== id)
-      );
-    }
+    setProductDetails((Prev: productData[]) =>
+      Prev.filter((item) => item.FrontId !== id)
+    );
   };
-
   return (
     <div className=" flex flex-col gap-[0.2] h-full">
       <div className=" flex items-center justify-between p-[0.7vw] rounded-xl h-3/40">
         <h1 className="font-bold text-[1.5vw]">Purchase Invoice</h1>
         <div className="flex gap-[0.4vw]">
-          <button className="bg-gray-600  w-[5vw] h-[5vh] text-white rounded text-[1vw]">
+          <Button className="w-[5vw] h-[5vh] text-white text-[1vw]">
             Edit
-          </button>
-          <button className="bg-gray-600  w-[5vw] h-[5vh] text-white rounded text-[1vw]">
+          </Button>
+          <Button className="w-[5vw] h-[5vh] text-white text-[1vw]">
             List
-          </button>
-          <button className="bg-gray-600  w-[5vw] h-[5vh] text-white rounded text-[1vw]">
+          </Button>
+          <Button
+            className="w-[5vw] h-[5vh] text-white text-[1vw]"
+            onClick={handleSendInvoiceData}
+          >
             Save
-          </button>
-          <button className="bg-gray-600  w-[5vw] h-[5vh] text-white rounded text-[1vw]">
+          </Button>
+          <Button className="w-[5vw] h-[5vh] text-white text-[1vw]">
             Cancel
-          </button>
+          </Button>
         </div>
       </div>
       <div className="flex flex-col gap-[0.2vw] h-37/40">
@@ -108,7 +144,8 @@ const Purchase = () => {
         >
           {[
             "Name",
-            "Address",
+            "Address 1",
+            "Address 2",
             "Invoice No",
             "Reference No",
             "Date",
@@ -119,6 +156,9 @@ const Purchase = () => {
               inputName={inputName}
               className="w-4/17"
               key={index}
+              handlecollectHeaderData={handlecollectHeaderData}
+              headerData={headerData}
+              data={data}
             />
           ))}
         </div>
@@ -156,6 +196,7 @@ const Purchase = () => {
           >
             {productDetails.map((product, index) => (
               <SingleTransactionObject
+                productDetails={productDetails}
                 handlDeleteProduct={handlDeleteProduct}
                 handleCollectProductData={handleCollectProductData}
                 handleNextLine={handleNextLine}
@@ -167,6 +208,7 @@ const Purchase = () => {
             <SingleTransactionObject
               handleCollectProductData={handleCollectProductData}
               handleNextLine={handleNextLine}
+              productDetails={productDetails}
             />
           </div>
         </div>

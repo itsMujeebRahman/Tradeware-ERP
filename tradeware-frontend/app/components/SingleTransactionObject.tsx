@@ -26,6 +26,7 @@ const changeValue: Record<string, keyof productData> = {
 
 interface props {
   productData?: productData;
+  productDetails: productData[];
   handlDeleteProduct?: (id: number) => void;
   handleCollectProductData: (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -77,7 +78,10 @@ const SingleTransactionObject = ({
   handleCollectProductData,
   handleNextLine,
   handlDeleteProduct,
+  productDetails,
 }: props) => {
+  const largest = Math.max(...productDetails?.map((item) => item.FrontId));
+
   if (!productData) {
     return null;
   }
@@ -93,7 +97,7 @@ const SingleTransactionObject = ({
           onKeyDown={(e) => handleNextLine(e, changeValue[data.Name])}
         />
       ))}
-      {handlDeleteProduct && (
+      {handlDeleteProduct && largest !== productData.FrontId ? (
         <div className="col-span-1 flex justify-center">
           <Trash
             className="text-red-400"
@@ -101,6 +105,8 @@ const SingleTransactionObject = ({
             onClick={() => handlDeleteProduct(productData.FrontId)}
           />
         </div>
+      ) : (
+        ""
       )}
     </div>
   );
