@@ -9,3 +9,9 @@ export const addPurchase = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+export const getPurchase = async (req, res) => {
+  await PurchaseModel.find()
+    .then((result) => res.json(result))
+    .catch((err) => res.status(500).json({ error: err.message }));
+};

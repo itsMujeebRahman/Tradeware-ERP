@@ -7,43 +7,14 @@ import useSWR from "swr";
 import React, { ChangeEvent, useState } from "react";
 import toast from "react-hot-toast";
 import List from "./List";
+import { product, productDataRest } from "../types/MainTypes";
 
-
-interface product {
-  Name: string;
-  Code: string;
-  Barcode: string;
-  Category: string;
-  Unit: string;
-  Cost: string;
-  SellPrice: number;
-  MaxSellPrice: number;
-  Quantity: number;
-  TaxPercentage: string;
-  Description: string;
-  _id: string;
-}
-
-const dataRest: product = {
-  Name: "",
-  Code: "",
-  Barcode: "",
-  Category: "",
-  Unit: "",
-  Cost: "",
-  SellPrice: 0,
-  MaxSellPrice: 0,
-  Quantity: 0,
-  TaxPercentage: "",
-  Description: "",
-  _id: "",
-};
-
-const Customer = () => {
+const Products = () => {
   const [enableCategory, setEnableCategory] = useState<boolean>(false);
   const [enableUnit, setEnableUnit] = useState<boolean>(false);
   const [editDetails, setEditDetails] = useState<boolean>(true);
-  const [productDetails, setProductDetails] = useState<product>(dataRest);
+  const [productDetails, setProductDetails] =
+    useState<product>(productDataRest);
   const [enableList, setEnableList] = useState<boolean>(false);
   const [isProduct, setIsProduct] = useState<boolean>(false);
   const [addDetails, setAddDetails] = useState<boolean>(true);
@@ -64,7 +35,7 @@ const Customer = () => {
   };
 
   const handleCancelButton = () => {
-    setProductDetails(dataRest);
+    setProductDetails(productDataRest);
     setAddDetails(true);
     setEditDetails(true);
     console.log(productDetails);
@@ -98,7 +69,7 @@ const Customer = () => {
         toast.error(error.resposne?.data?.error);
       }
       mutate();
-      setProductDetails(dataRest);
+      setProductDetails(productDataRest);
     } else {
       try {
         const response = await axios.post(
@@ -110,7 +81,7 @@ const Customer = () => {
         toast.error(error.resposne?.data?.error);
       }
       mutate();
-      setProductDetails(dataRest);
+      setProductDetails(productDataRest);
     }
   };
 
@@ -211,4 +182,4 @@ const Customer = () => {
   );
 };
 
-export default Customer;
+export default Products;

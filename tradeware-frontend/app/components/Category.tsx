@@ -3,26 +3,15 @@ import { X } from "lucide-react";
 import React, { SetStateAction, useState } from "react";
 import toast from "react-hot-toast";
 import { mutate } from "swr";
-
-interface Category {
-  Name: string;
-  Code: string;
-  Description: string;
-}
-
-const dataRest: Category = {
-  Name: "",
-  Code: "",
-  Description: "",
-};
+import { category, categoryRest } from "../types/MainTypes";
 
 interface props {
   setEnableCategory: React.Dispatch<SetStateAction<boolean>>;
-  cat: Category[];
+  cat: category[];
 }
 
 const Category = ({ setEnableCategory, cat }: props) => {
-  const [categoryDetails, setCategoryDtails] = useState<Category>(dataRest);
+  const [categoryDetails, setCategoryDtails] = useState<category>(categoryRest);
   const [enableList, setEnableList] = useState<boolean>(false);
 
   const handleCategoryDetails = (
@@ -115,7 +104,7 @@ const Category = ({ setEnableCategory, cat }: props) => {
               className=" h-full p-1 gap-1 flex flex-col overflow-y-scroll bg-black/2 border
                   border-gray-300 rounded-b-xl "
             >
-              {cat?.map((c: Category, index: number) => (
+              {cat?.map((c: category, index: number) => (
                 <div
                   key={index}
                   className="grid grid-cols-8 p-2 gap-2 shadow rounded-xl bg-white"

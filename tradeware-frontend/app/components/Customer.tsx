@@ -5,35 +5,12 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import List from "./List";
 import useSWR from "swr";
-
-interface person {
-  Name: string;
-  Address1: string;
-  Address2: string;
-  Address3: string;
-  Phone: string;
-  Email: string;
-  TaxNo: string;
-  Notes: string;
-  _id: string;
-}
-
-const dataReset: person = {
-  Name: "",
-  Address1: "",
-  Address2: "",
-  Address3: "",
-  Phone: "",
-  Email: "",
-  TaxNo: "",
-  Notes: "",
-  _id: "",
-};
+import { person, personReset } from "../types/MainTypes";
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 const Customer = () => {
-  const [customerDetails, setCustomerDetails] = useState<person>(dataReset);
+  const [customerDetails, setCustomerDetails] = useState<person>(personReset);
   const [enableList, setEnableList] = useState<boolean>(false);
   const [editData, setEditData] = useState<boolean>(true);
   const [addData, setAddData] = useState<boolean>(true);
@@ -65,7 +42,7 @@ const Customer = () => {
       } catch {
         toast.error(`Error while Saving ${customerDetails.Name}'s Data `);
       }
-      setCustomerDetails(dataReset);
+      setCustomerDetails(personReset);
       mutate();
     } else {
       try {
@@ -78,7 +55,7 @@ const Customer = () => {
         toast.error(`Error while Saving ${customerDetails.Name}'s Data `);
       }
     }
-    setCustomerDetails(dataReset);
+    setCustomerDetails(personReset);
     setAddData(true);
     mutate();
   };

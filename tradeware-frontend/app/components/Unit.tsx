@@ -3,18 +3,7 @@ import { X } from "lucide-react";
 import React, { SetStateAction, useState } from "react";
 import toast from "react-hot-toast";
 import { mutate } from "swr";
-
-interface unit {
-  Name: string;
-  Code: string;
-  Symbol: string;
-}
-
-const dataReset: unit = {
-  Name: "",
-  Code: "",
-  Symbol: "",
-};
+import { unit, unitReset } from "../types/MainTypes";
 
 interface props {
   setEnableUnit: React.Dispatch<SetStateAction<boolean>>;
@@ -22,7 +11,7 @@ interface props {
 }
 
 const Unit = ({ setEnableUnit, uni }: props) => {
-  const [unitDetails, setUnitDtails] = useState<unit>(dataReset);
+  const [unitDetails, setUnitDtails] = useState<unit>(unitReset);
   const [enableList, setEnableList] = useState<boolean>(false);
 
   const handleUnitData = (e: React.ChangeEvent<HTMLInputElement>) => {

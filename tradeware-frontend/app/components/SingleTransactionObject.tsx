@@ -1,16 +1,6 @@
 import { Trash } from "lucide-react";
-
-interface productData {
-  FrontId: number;
-  Name: string;
-  Code: string;
-  Barcode: string;
-  SellPrice: number;
-  Quantity: number;
-  Tax: number;
-  SubTotal: number;
-  NetTotal: number;
-}
+import { productData } from "../types/MainTypes";
+import { fieldData } from "../constants/MainConstants";
 
 const changeValue: Record<string, keyof productData> = {
   FrontId: "FrontId",
@@ -38,40 +28,7 @@ interface props {
     name: string
   ) => void;
 }
-const fieldData = [
-  {
-    Name: "Code",
-    Span: 4,
-  },
-  {
-    Name: "Barcode",
-    Span: 4,
-  },
-  {
-    Name: "Name",
-    Span: 11,
-  },
-  {
-    Name: "Quantity",
-    Span: 2,
-  },
-  {
-    Name: "Rate",
-    Span: 2,
-  },
-  {
-    Name: "Sub Total",
-    Span: 4,
-  },
-  {
-    Name: "Tax",
-    Span: 2,
-  },
-  {
-    Name: "Net Total",
-    Span: 4,
-  },
-];
+
 
 const SingleTransactionObject = ({
   productData,

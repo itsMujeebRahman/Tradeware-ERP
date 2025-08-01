@@ -1,16 +1,6 @@
-import React from "react"
+import React from "react";
+import { person } from "../types/MainTypes";
 
-interface person {
-  Name: string;
-  Address1: string;
-  Address2: string;
-  Address3: string;
-  Phone: string;
-  Email: string;
-  TaxNo: string;
-  Notes: string;
-  _id: string;
-}
 interface props {
   inputName: string;
   handleCollectDetails: any;

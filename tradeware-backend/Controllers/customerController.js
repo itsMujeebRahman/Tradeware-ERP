@@ -1,4 +1,4 @@
-import CustomerModel from "../Models/Customer.js"
+import CustomerModel from "../Models/Customer.js";
 
 export const addCustomer = (req, res) => {
   const customerData = req.body;
@@ -25,10 +25,8 @@ export const updateCustomer = async (req, res) => {
     .catch((err) => res.json(err));
 };
 
-export const getCustomer = (req, res) => {
-  CustomerModel.find()
+export const getCustomer = async (req, res) => {
+  await CustomerModel.find()
     .then((result) => res.json(result))
     .catch((err) => res.status(500).json({ error: err.message }));
 };
-
-

@@ -1,33 +1,7 @@
 import { FullscreenIcon, X } from "lucide-react";
 import React, { useState } from "react";
 import SingleListObject from "./SingleListObject";
-
-interface person {
-  Name: string;
-  Address1: string;
-  Address2: string;
-  Address3: string;
-  Phone: string;
-  Email: string;
-  TaxNo: string;
-  Notes: string;
-  _id: string;
-}
-
-interface product {
-  Name: string;
-  Code: string;
-  Barcode: string;
-  Category: string;
-  Unit: string;
-  Cost: string;
-  SellPrice: number;
-  MaxSellPrice: number;
-  Quantity: number;
-  TaxPercentage: string;
-  Description: string;
-  _id: string;
-}
+import { person, product } from "../types/MainTypes";
 
 type props =
   | {

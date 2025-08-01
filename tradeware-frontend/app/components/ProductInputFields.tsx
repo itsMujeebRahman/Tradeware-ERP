@@ -1,33 +1,9 @@
-interface Unit {
-  Name: string;
-  Code: string;
-  Symbol: string;
-}
-
-interface Category {
-  Name: string;
-  Code: string;
-  Description: string;
-}
-
-interface product {
-  Name: string;
-  Code: string;
-  Barcode: string;
-  Category: string;
-  Unit: string;
-  Cost: string;
-  SellPrice: number;
-  MaxSellPrice: number;
-  Quantity: number;
-  TaxPercentage: string;
-  Description: string;
-}
+import { product, unit, category } from "../types/MainTypes";
 
 interface props {
   inputName: string;
-  cat: Category[];
-  uni: Unit[];
+  cat: category[];
+  uni: unit[];
   productDetails: product;
   handleCollectDetails: any;
   editDetails: boolean;

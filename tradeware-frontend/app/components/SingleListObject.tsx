@@ -1,31 +1,5 @@
 import React from "react";
-
-interface person {
-  Name: string;
-  Address1: string;
-  Address2: string;
-  Address3: string;
-  Phone: string;
-  Email: string;
-  TaxNo: string;
-  Notes: string;
-  _id: string;
-}
-
-interface product {
-  Name: string;
-  Code: string;
-  Barcode: string;
-  Category: string;
-  Unit: string;
-  Cost: string;
-  SellPrice: number;
-  MaxSellPrice: number;
-  Quantity: number;
-  TaxPercentage: string;
-  Description: string;
-  _id: string;
-}
+import { product, person } from "../types/MainTypes";
 
 //another method of using for defining type for dynamic type change
 type props =

@@ -6,65 +6,36 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import useSWR from "swr";
 import { Button } from "@/components/ui/button";
-
-interface headerData {
-  Name: string;
-  Address1: string;
-  Address2: string;
-  InvoiceNo: string;
-  ReferenceNo: string;
-  Date: string;
-  PaymentMethod: string;
-  Notes: string;
-}
-
-const headReset: headerData = {
-  Name: "",
-  Address1: "",
-  Address2: "",
-  InvoiceNo: "",
-  ReferenceNo: "",
-  Date: "",
-  PaymentMethod: "",
-  Notes: "",
-};
-
-interface productData {
-  FrontId: number;
-  Name: string;
-  Code: string;
-  Barcode: string;
-  SellPrice: number;
-  Quantity: number;
-  Tax: number;
-  SubTotal: number;
-  NetTotal: number;
-}
-
-const DataReset: productData = {
-  FrontId: 0,
-  Name: "",
-  Code: "",
-  Barcode: "",
-  SellPrice: 0,
-  Quantity: 0,
-  Tax: 0,
-  SubTotal: 0,
-  NetTotal: 0,
-};
+import {
+  headerData,
+  productData,
+  headReset,
+  productReset,
+} from "../types/MainTypes";
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 const Purchase = () => {
+  const { data, mutate } = useSWR("http://localhost:3001/supplier", fetcher);
+  const { data: purchase1, mutate: pulse } = useSWR(
+    "http://localhost:3001/purchase",
+    fetcher
+  );
+
   const [productDetails, setProductDetails] = useState<productData[]>([
-    { ...DataReset, FrontId: 1 },
+    { ...productReset, FrontId: 1 },
   ]);
 
-  const [headerData, setHeaderData] = useState<headerData>(headReset);
-
-  const { data, mutate } = useSWR("http://localhost:3001/supplier", fetcher);
+  const [headerData, setHeaderData] = useState<headerData>({
+    ...headReset,
+    Date: new Date().toISOString().split("T")[0],
+    InvoiceNo: purchase1?.length + 1,
+  });
 
   const handleSendInvoiceData = async () => {
+    setHeaderData((prev) => ({
+      ...prev,
+    }));
     try {
       const response = await axios.post("http://localhost:3001/purchase", {
         productDetails,
@@ -74,8 +45,9 @@ const Purchase = () => {
     } catch (error: any) {
       toast.error(error.resposne?.data?.error);
     }
-    setProductDetails([{ ...DataReset, FrontId: 1 }]);
-    // setHeaderData(headReset);
+    setProductDetails([{ ...productReset, FrontId: 1 }]);
+    setHeaderData(headReset);
+    pulse();
   };
 
   const handlecollectHeaderData = (
@@ -103,7 +75,7 @@ const Purchase = () => {
       setProductDetails((Prev) => [
         ...Prev,
         {
-          ...DataReset,
+          ...productReset,
           FrontId: productDetails.length + 1,
         },
       ]);
@@ -118,7 +90,9 @@ const Purchase = () => {
   return (
     <div className=" flex flex-col gap-[0.2] h-full">
       <div className=" flex items-center justify-between p-[0.7vw] rounded-xl h-3/40">
-        <h1 className="font-bold text-[1.5vw]">Purchase Invoice</h1>
+        <h1 className="font-bold text-[1.5vw]">
+          Purchase Invoice / {purchase1?.length}
+        </h1>
         <div className="flex gap-[0.4vw]">
           <Button className="w-[5vw] h-[5vh] text-white text-[1vw]">
             Edit
@@ -139,7 +113,7 @@ const Purchase = () => {
       </div>
       <div className="flex flex-col gap-[0.2vw] h-37/40">
         <div
-          className=" rounded-xl h-34/100 bg-white border border-gray-300 p-[1vw]
+          className=" rounded-xl h-33/100 bg-white border border-gray-300 p-[0.9vw]
         flex flex-col !items-start content-start gap-[0.7vw] justify-start flex-wrap"
         >
           {[
