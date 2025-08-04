@@ -3,8 +3,7 @@ import React, { useState } from "react";
 import SingleListObject from "./SingleListObject";
 import { person, product } from "../types/MainTypes";
 
-type props =
-  | {
+type props = {
       isProduct: true;
       setEnableList: React.Dispatch<React.SetStateAction<boolean>>;
       data: product[];

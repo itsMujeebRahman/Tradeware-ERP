@@ -1,101 +1,108 @@
+import React, { useEffect, useState } from "react";
 import Dropdown from "./elements/Dropdown";
-import { Input } from "@/components/ui/input";
-import { headerData, pay } from "../types/MainTypes";
-import { person } from "../types/MainTypes";
+import { pay, person, product, headerData } from "../types/MainTypes";
 import { payment } from "../constants/MainConstants";
 
+interface head {
+  name: string;
+  type: string;
+}
+
 interface props {
-  inputName: string;
-  className: string;
-  handlecollectHeaderData: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
+  inputName: head;
+  supplier1: person[];
+  handlecollectHeaderData: any;
   headerData: headerData;
-  data: person[];
 }
 
 const changeValue: Record<string, keyof headerData> = {
   Name: "Name",
-  "Invoice No": "InvoiceNo",
   "Address 1": "Address1",
   "Address 2": "Address2",
+  "Invoice No": "InvoiceNo",
   "Reference No": "ReferenceNo",
-  "Payment Method": "PaymentMethod",
   Date: "Date",
+  "Payment Method": "PaymentMethod",
   Notes: "Notes",
 };
 
 const TransactionInputField = ({
   inputName,
-  className,
+  supplier1,
   handlecollectHeaderData,
   headerData,
-  data,
 }: props) => {
+  const [selectHead, setSelectHead] = useState<person | pay | product | null>(
+    null
+  );
+
+  useEffect(() => {
+    if (!selectHead) return;
+    if ("Address1" in selectHead) {
+      handlecollectHeaderData({
+        target: { name: "Name", value: selectHead.Name },
+      } as any);
+
+      handlecollectHeaderData({
+        target: { name: "Address1", value: selectHead.Address1 },
+      } as any);
+
+      handlecollectHeaderData({
+        target: { name: "Address2", value: selectHead.Address2 },
+      } as any);
+    } else {
+      handlecollectHeaderData({
+        target: { name: "PaymentMethod", value: selectHead.Name },
+      } as any);
+    }
+  }, [selectHead]);
+
+  const dropdownData =
+    inputName.name === "Name"
+      ? supplier1
+      : inputName.name === "Payment Method"
+      ? payment
+      : [];
+
   return (
-    <div className={`break-inside-avoid ${className}`}>
-      {["Reference No", "Date"].includes(inputName) ? (
-        <div className="flex flex-col w-full gap-[0.1vw]">
-          <p className="text-[0.8vw] ">{inputName}</p>
-          <Input
-            type={inputName === "Date" ? "Date" : "text"}
-            className={`border border-gray-300 focus:outline-gray-300 h-[2vw] p-[0.3vw]
-                rounded-lg bg-gray-50 w-full `}
-            name={changeValue[inputName]}
-            value={
-              inputName === "Date"
-                ? new Date().toISOString().split("T")[0]
-                : headerData[changeValue[inputName]]
-            }
-            onChange={handlecollectHeaderData}
-          />
-        </div>
-      ) : ["Notes"].includes(inputName) ? (
-        <div className="flex flex-col w-full gap-[0.1vw]">
-          <p className="text-[0.8vw]">{inputName}</p>
-          <textarea
-            className={`border border-gray-300 focus:outline-gray-300 h-[6vw] p-[0.3vw]
-                rounded-lg bg-gray-50 w-full resize-none`}
-            name={changeValue[inputName]}
-            value={headerData[changeValue[inputName]]}
-            onChange={handlecollectHeaderData}
-          />
-        </div>
-      ) : ["Name", "Payment Method"].includes(inputName) ? (
-        <div className="flex flex-col w-full gap-[0.1vw]">
-          <p className="text-[0.8vw]  ">{inputName}</p>
-          {inputName === "Name" ? (
-            <Dropdown
-              data={data}
-              handlecollectHeaderData={handlecollectHeaderData}
-              inputName={inputName}
-              className="border border-gray-300 focus:outline-gray-300 h-[2vw] p-[0.3vw] 
-                      rounded-lg bg-gray-50 w-full"
-            />
-          ) : (
-            <Dropdown
-              data={payment}
-              handlecollectHeaderData={handlecollectHeaderData}
-              inputName={inputName}
-              className="border border-gray-300 focus:outline-gray-300 h-[2vw] p-[0.3vw] 
-                      rounded-lg bg-gray-50 w-full"
-            />
-          )}
-        </div>
-      ) : ["Address 1", "Address 2"].includes(inputName) ? (
-        <div className="flex flex-col w-full gap-[0.1vw]">
-          <p className="text-[0.8vw]  ">{inputName}</p>
-          <input
-            className={`border border-gray-300 focus:outline-gray-300 h-[2vw] p-[0.3vw]
-                rounded-lg bg-gray-50 w-full `}
-            name={changeValue[inputName]}
-            value={headerData[changeValue[inputName]]}
-            onChange={handlecollectHeaderData}
-            readOnly
-          />
-        </div>
+    <div className="w-[20vw] relative ">
+      <p
+        className="text-txtone absolute top-0 left-0 -translate-y-1/2 translate-x-2 bg-white 
+      px-[0.3vw] z-10"
+      >
+        {inputName.name}
+      </p>
+
+      {inputName.type === "dropdown" ? (
+        <Dropdown
+          className="border border-gray-300 h-[2.5vw] rounded w-[20vw]"
+          data={dropdownData}
+          selected={selectHead}
+          setSelected={setSelectHead}
+          inputFieldName={inputName}
+        />
+      ) : inputName.type === "textarea" ? (
+        <textarea
+          className="border border-gray-300 w-full h-[6.5vw] p-[0.5vw] rounded resize-none"
+          name={changeValue[inputName.name]}
+          value={headerData[changeValue[inputName.name]]}
+          onChange={handlecollectHeaderData}
+        />
+      ) : inputName.type === "date" ? (
+        <input
+          className="border border-gray-300 w-full h-[2.5vw] px-[0.5vw] rounded "
+          type="Date"
+          name={changeValue[inputName.name]}
+          value={headerData[changeValue[inputName.name]]}
+          onChange={handlecollectHeaderData}
+        />
       ) : (
-        ""
+        <input
+          className="border border-gray-300 w-full h-[2.5vw] px-[0.5vw] rounded "
+          name={changeValue[inputName.name]}
+          value={headerData[changeValue[inputName.name]]}
+          onChange={handlecollectHeaderData}
+        />
       )}
     </div>
   );

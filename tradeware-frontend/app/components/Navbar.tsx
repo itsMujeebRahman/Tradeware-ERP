@@ -36,8 +36,8 @@ const Navbar = ({ navClose, setNavClose }: props) => {
 
   return (
     <div
-      className={`shadow bg-[#212023] h-full p-3 flex flex-col gap-3 rounded-2xl ${
-        navClose ? "w-[5vw]" : "w-[20vw]"
+      className={`shadow bg-[#212023] h-full p-3 flex flex-col gap-3 ${
+        navClose ? "w-[5vw]" : "w-[15vw]"
       }`}
     >
       <div className="p-2 flex items-center justify-between">
@@ -48,7 +48,7 @@ const Navbar = ({ navClose, setNavClose }: props) => {
         )}
 
         <ChevronRight
-          className="text-white bg-[#363538] p-1 rounded-xl"
+          className="text-white p-1"
           size={28}
           onClick={() => setNavClose(!navClose)}
         />

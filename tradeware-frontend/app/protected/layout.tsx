@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import "../globals.css";
 import Navbar from "../components/Navbar";
 import { Toaster } from "react-hot-toast";
-import { useState } from "react";
+import { Fragment, useState } from "react";
+import MainProvider from "../providers/MainProvider";
 
 // export const metadata: Metadata = {
 //   title: "Create Next App",
@@ -20,11 +21,13 @@ export default function RootLayout({
   const state = false;
   return (
     <html lang="en">
-      <body className="flex h-screen w-screen gap-1 p-[0.5vw] !bg-[#212023]">
-        <Toaster position="top-right" />
-        <Navbar setNavClose={setNavClose} navClose={navClose} />
-        {children}
-      </body>
+        <body className="flex h-screen w-screen gap-1">
+      <MainProvider>
+          <Toaster position="top-right" />
+          <Navbar setNavClose={setNavClose} navClose={navClose} />
+          {children}
+      </MainProvider>
+        </body>
     </html>
   );
 }

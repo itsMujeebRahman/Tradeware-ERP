@@ -7,14 +7,19 @@ import useSWR from "swr";
 import React, { ChangeEvent, useState } from "react";
 import toast from "react-hot-toast";
 import List from "./List";
-import { product, productDataRest } from "../types/MainTypes";
+import {
+  product,
+  productDataRest,
+  productAdd,
+  productAddDataRest,
+} from "../types/MainTypes";
 
 const Products = () => {
   const [enableCategory, setEnableCategory] = useState<boolean>(false);
   const [enableUnit, setEnableUnit] = useState<boolean>(false);
   const [editDetails, setEditDetails] = useState<boolean>(true);
   const [productDetails, setProductDetails] =
-    useState<product>(productDataRest);
+    useState<productAdd>(productAddDataRest);
   const [enableList, setEnableList] = useState<boolean>(false);
   const [isProduct, setIsProduct] = useState<boolean>(false);
   const [addDetails, setAddDetails] = useState<boolean>(true);
@@ -29,6 +34,7 @@ const Products = () => {
     (val) => val === "" || val === 0
   );
 
+  console.log("on", productDetails);
   const handleProductList = () => {
     setIsProduct(true);
     setEnableList(true);
@@ -68,6 +74,7 @@ const Products = () => {
       } catch (error: any) {
         toast.error(error.resposne?.data?.error);
       }
+      console.log("productDetails", productDetails);
       mutate();
       setProductDetails(productDataRest);
     } else {

@@ -1,15 +1,15 @@
-import { product, unit, category } from "../types/MainTypes";
+import { product, unit, category, productAdd } from "../types/MainTypes";
 
 interface props {
   inputName: string;
   cat: category[];
   uni: unit[];
-  productDetails: product;
+  productDetails: productAdd;
   handleCollectDetails: any;
   editDetails: boolean;
 }
 
-const changeValue: Record<string, keyof product> = {
+const changeValue: Record<string, keyof productAdd> = {
   Name: "Name",
   Code: "Code",
   Barcode: "Barcode",

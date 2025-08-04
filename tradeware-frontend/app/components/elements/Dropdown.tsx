@@ -1,84 +1,64 @@
-import React, { SetStateAction, useEffect, useState } from "react";
-import { headerData, pay, person } from "@/app/types/MainTypes";
+import React, { SetStateAction, useState } from "react";
+import { headerData, pay, person, product } from "@/app/types/MainTypes";
 
 const changeValue: Record<string, keyof headerData> = {
   Name: "Name",
   "Payment Method": "PaymentMethod",
 };
 
-type data1 = person | pay;
+interface inputNameType {
+  name: string;
+}
 
-const isPerson = (item: data1): item is person => {
-  return "Address1" in item;
-};
+type data1 = person | pay | product;
 
 interface props {
   data: data1[];
-  handlecollectHeaderData: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  inputName: string;
+  inputFieldName?: inputNameType;
+  setSelected: React.Dispatch<SetStateAction<data1 | null>>;
+  selected: data1 | null;
   className: string;
 }
+
 const Dropdown = ({
   data,
-  handlecollectHeaderData,
-  inputName,
+  inputFieldName,
   className,
+  setSelected,
+  selected,
 }: props) => {
   const [enableList, setEnableList] = useState<boolean>(false);
-  const [selected, setSelected] = useState<person | pay>();
-
-  const handleDropList = (item: data1) => {
-    setEnableList(false);
-    setSelected(item);
-
-    if (isPerson(item)) {
-      handlecollectHeaderData({
-        target: { name: "Address1", value: item?.Address1 },
-      } as any);
-
-      handlecollectHeaderData({
-        target: { name: "Address2", value: item?.Address2 },
-      } as any);
-
-      handlecollectHeaderData({
-        target: { name: "Name", value: item?.Name },
-      } as any);
-    } else {
-      handlecollectHeaderData({
-        target: { name: "PaymentMethod", value: item.Name },
-      } as any);
-    }
-  };
-
   const handleEnableList = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === " ") {
       setEnableList(!enableList);
     }
   };
 
+  const handleDropDown = (item: data1) => {
+    setSelected(item);
+    setEnableList(false);
+  };
+
   return (
-    <div className="flex flex-col gap-[0.5vw] relative">
+    <div className={`relative ${className}`}>
       <input
-        className={`${className}`}
-        name={changeValue[inputName]}
+        className={`w-full h-full px-[0.4vw]`}
+        name={inputFieldName ? changeValue[inputFieldName.name] : ""}
         value={selected?.Name || ""}
-        onChange={handlecollectHeaderData}
         onKeyDown={(e) => handleEnableList(e)}
+        readOnly
       />
       {enableList && (
         <div
-          className="flex flex-col absolute gap-[0.5vw] top-[2.5vw] left-0 max-h-[20vw] 
-      overflow-y-auto backdrop-blur-lg h-fit rounded-lg overflow-x-hidden"
+          className="flex flex-col absolute gap-[0.5vw] top-[3vw] left-0 max-h-[20vw] 
+      overflow-y-auto bg-white h-fit rounded overflow-x-hidden z-50 w-full"
         >
           {data?.map((item, i) => (
             <div
-              className="border border-gray-300 focus:outline-gray-300 h-[2vw] p-[0.3vw] 
-                rounded-lg bg-gray-50 w-[18.5vw] "
+              className="border border-gray-300 w-full py-[0.3vw] px-[0.5vw] rounded "
               key={i}
             >
-              <div onClick={() => handleDropList(item)}>
-                {typeof item === "object" ? item?.Name : item}
-              </div>
+              <div onClick={() => handleDropDown(item)}>{item?.Name}</div>
             </div>
           ))}
         </div>

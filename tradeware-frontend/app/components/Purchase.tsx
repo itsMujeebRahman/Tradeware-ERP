@@ -12,15 +12,20 @@ import {
   headReset,
   productReset,
 } from "../types/MainTypes";
+import { headerField } from "../constants/MainConstants";
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 const Purchase = () => {
-  const { data, mutate } = useSWR("http://localhost:3001/supplier", fetcher);
+  const { data: supplier1, mutate } = useSWR(
+    "http://localhost:3001/supplier",
+    fetcher
+  );
   const { data: purchase1, mutate: pulse } = useSWR(
     "http://localhost:3001/purchase",
     fetcher
   );
+  const { data: product1 } = useSWR("http://localhost:3001/product", fetcher);
 
   const [productDetails, setProductDetails] = useState<productData[]>([
     { ...productReset, FrontId: 1 },
@@ -55,6 +60,7 @@ const Purchase = () => {
   ) => {
     const { name, value } = e.target;
     setHeaderData((Prev) => ({ ...Prev, [name]: value }));
+    console.log("headerData", headerData);
   };
 
   const handleCollectProductData = (
@@ -65,6 +71,7 @@ const Purchase = () => {
     setProductDetails((Prev) =>
       Prev.map((item, i) => (i + 1 === id ? { ...item, [name]: value } : item))
     );
+    console.log("productDetails", productDetails);
   };
 
   const handleNextLine = (
@@ -113,26 +120,16 @@ const Purchase = () => {
       </div>
       <div className="flex flex-col gap-[0.2vw] h-37/40">
         <div
-          className=" rounded-xl h-33/100 bg-white border border-gray-300 p-[0.9vw]
-        flex flex-col !items-start content-start gap-[0.7vw] justify-start flex-wrap"
+          className=" rounded-xl h-33/100 bg-white border border-gray-300 p-[1.7vw]
+        flex flex-col !items-start content-start gap-[1.5vw] justify-start flex-wrap"
         >
-          {[
-            "Name",
-            "Address 1",
-            "Address 2",
-            "Invoice No",
-            "Reference No",
-            "Date",
-            "Payment Method",
-            "Notes",
-          ].map((inputName, index) => (
+          {headerField.map((inputName, index) => (
             <TransactionInputField
               inputName={inputName}
-              className="w-4/17"
               key={index}
+              supplier1={supplier1}
               handlecollectHeaderData={handlecollectHeaderData}
               headerData={headerData}
-              data={data}
             />
           ))}
         </div>
@@ -168,20 +165,23 @@ const Purchase = () => {
             className="rounded-b-xl  border border-gray-300 h-45/50 p-[0.3vw] bg-gray-100 
           flex flex-col gap-[0.3vw] overflow-y-scroll"
           >
-            {productDetails.map((product, index) => (
+            {productDetails.map((productData, index) => (
               <SingleTransactionObject
-                productDetails={productDetails}
-                handlDeleteProduct={handlDeleteProduct}
-                handleCollectProductData={handleCollectProductData}
-                handleNextLine={handleNextLine}
-                productData={product}
                 key={index}
+                product1={product1}
+                handlDeleteProduct={handlDeleteProduct}
+                handleNextLine={handleNextLine}
+                handleCollectProductData={handleCollectProductData}
+                productDetails={productDetails}
+                productData={productData}
               />
             ))}
 
             <SingleTransactionObject
-              handleCollectProductData={handleCollectProductData}
+              product1={product1}
+              handlDeleteProduct={handlDeleteProduct}
               handleNextLine={handleNextLine}
+              handleCollectProductData={handleCollectProductData}
               productDetails={productDetails}
             />
           </div>

@@ -3,7 +3,7 @@ import React from "react";
 
 function page() {
   return (
-    <div className="w-full h-full rounded-xl bg-[#f8fafb] p-[0.6vw]">
+    <div className="w-full h-full bg-[#f8fafb] p-[0.3vw]">
       <Purchase />
     </div>
   );

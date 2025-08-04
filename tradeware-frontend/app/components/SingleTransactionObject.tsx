@@ -1,6 +1,8 @@
 import { Trash } from "lucide-react";
-import { productData } from "../types/MainTypes";
+import { pay, person, product, productData } from "../types/MainTypes";
 import { fieldData } from "../constants/MainConstants";
+import Dropdown from "./elements/Dropdown";
+import { useEffect, useState } from "react";
 
 const changeValue: Record<string, keyof productData> = {
   FrontId: "FrontId",
@@ -15,6 +17,7 @@ const changeValue: Record<string, keyof productData> = {
 };
 
 interface props {
+  product1: product[];
   productData?: productData;
   productDetails: productData[];
   handlDeleteProduct?: (id: number) => void;
@@ -29,14 +32,82 @@ interface props {
   ) => void;
 }
 
-
 const SingleTransactionObject = ({
   productData,
   handleCollectProductData,
   handleNextLine,
   handlDeleteProduct,
   productDetails,
+  product1,
 }: props) => {
+  const [selectProduct, setSelectProduct] = useState<
+    product | pay | person | null
+  >(null);
+
+  useEffect(() => {
+    if (!selectProduct) return;
+    if ("Quantity" in selectProduct) {
+      const id = productData?.FrontId!;
+
+      const netTotal =
+        Number(selectProduct.Quantity) * Number(selectProduct.SellPrice) +
+        Number(selectProduct.Quantity) * Number(selectProduct.TaxPercentage);
+
+      const subTotal =
+        Number(selectProduct.Quantity) * Number(selectProduct.SellPrice);
+
+      handleCollectProductData(
+        {
+          target: { name: "Name", value: selectProduct.Name },
+        } as any,
+        id
+      );
+      handleCollectProductData(
+        {
+          target: { name: "Code", value: selectProduct.Code },
+        } as any,
+        id
+      );
+      handleCollectProductData(
+        {
+          target: { name: "Barcode", value: selectProduct.Barcode },
+        } as any,
+        id
+      );
+      handleCollectProductData(
+        {
+          target: { name: "SellPrice", value: selectProduct.SellPrice },
+        } as any,
+        id
+      );
+      handleCollectProductData(
+        {
+          target: { name: "Tax", value: selectProduct.TaxPercentage },
+        } as any,
+        id
+      );
+      handleCollectProductData(
+        {
+          target: {
+            name: "SubTotal",
+            value: subTotal,
+          },
+        } as any,
+        id
+      );
+
+      handleCollectProductData(
+        {
+          target: {
+            name: "NetTotal",
+            value: netTotal,
+          },
+        } as any,
+        id
+      );
+    }
+  }, [selectProduct]);
+
   const largest = Math.max(...productDetails?.map((item) => item.FrontId));
 
   if (!productData) {
@@ -44,16 +115,26 @@ const SingleTransactionObject = ({
   }
   return (
     <div className={`grid grid-cols-34 shadow bg-white rounded items-center`}>
-      {fieldData.map((data, index) => (
-        <input
-          className={`text-[1vw] h-[4vh] focus:outline-gray-400 col-span-${data.Span} pl-[0.3vw]`}
-          key={index}
-          name={changeValue[data.Name]}
-          value={productData[changeValue[data.Name]]}
-          onChange={(e) => handleCollectProductData(e, productData.FrontId)}
-          onKeyDown={(e) => handleNextLine(e, changeValue[data.Name])}
-        />
-      ))}
+      {fieldData.map((data, index) => {
+        return data.type === "dropdown" ? (
+          <Dropdown
+            className={`text-[1vw] h-[4vh] focus:outline-gray-400 col-span-${data.Span}`}
+            key={index}
+            data={product1}
+            setSelected={setSelectProduct}
+            selected={selectProduct}
+          />
+        ) : (
+          <input
+            className={`text-[1vw] h-[4vh] focus:outline-gray-400 col-span-${data.Span} pl-[0.4vw] `}
+            key={index}
+            name={changeValue[data.Name]}
+            value={productData[changeValue[data.Name]]}
+            onChange={(e) => handleCollectProductData(e, productData.FrontId)}
+            onKeyDown={(e) => handleNextLine(e, changeValue[data.Name])}
+          />
+        );
+      })}
       {handlDeleteProduct && largest !== productData.FrontId ? (
         <div className="col-span-1 flex justify-center">
           <Trash

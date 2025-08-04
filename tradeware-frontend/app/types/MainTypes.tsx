@@ -1,3 +1,12 @@
+import { SetStateAction } from "react";
+
+export type data1 = person | pay | product;
+
+export interface contextType {
+  selected: data1 | null;
+  setSelected: React.Dispatch<SetStateAction<data1 | null>>;
+}
+
 //PURCHASE TYPES
 export interface headerData {
   Name: string;
@@ -130,4 +139,32 @@ export const productDataRest: product = {
   TaxPercentage: "",
   Description: "",
   _id: "",
+};
+
+export interface productAdd {
+  Name: string;
+  Code: string;
+  Barcode: string;
+  Category: string;
+  Unit: string;
+  Cost: string;
+  SellPrice: number;
+  MaxSellPrice: number;
+  Quantity: number;
+  TaxPercentage: string;
+  Description: string;
+}
+
+export const productAddDataRest: productAdd = {
+  Name: "",
+  Code: "",
+  Barcode: "",
+  Category: "",
+  Unit: "",
+  Cost: "",
+  SellPrice: 0,
+  MaxSellPrice: 0,
+  Quantity: 0,
+  TaxPercentage: "",
+  Description: "",
 };
