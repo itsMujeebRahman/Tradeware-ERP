@@ -28,6 +28,18 @@ const purchaseSchema = new mongoose.Schema({
   Notes: {
     type: String,
   },
+  TotalQty: {
+    type: Number,
+  },
+  GrandSubTotal: {
+    type: Number,
+  },
+  TotalTax: {
+    type: Number,
+  },
+  GrandNetTotal: {
+    type: Number,
+  },
 
   productDetails: [
     {
@@ -48,23 +60,23 @@ const purchaseSchema = new mongoose.Schema({
         required: true,
       },
       SellPrice: {
-        type: String,
+        type: Number,
         required: true,
       },
       Quantity: {
-        type: String,
+        type: Number,
         required: true,
       },
       Tax: {
-        type: String,
+        type: Number,
         required: true,
       },
       SubTotal: {
-        type: String,
+        type: Number,
         required: true,
       },
       NetTotal: {
-        type: String,
+        type: Number,
         required: true,
       },
     },

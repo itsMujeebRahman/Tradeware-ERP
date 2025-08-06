@@ -1,6 +1,6 @@
 import { Trash } from "lucide-react";
 import { pay, person, product, productData } from "../types/MainTypes";
-import { fieldData } from "../constants/MainConstants";
+import { fieldData } from "../constants/PurchaseConstants";
 import Dropdown from "./elements/Dropdown";
 import { useEffect, useState } from "react";
 
@@ -44,17 +44,56 @@ const SingleTransactionObject = ({
     product | pay | person | null
   >(null);
 
+  const handleQuantity = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    id: number
+  ) => {
+    if (!selectProduct) return;
+    if ("Quantity" in selectProduct) {
+      const { value } = e.target;
+
+      const subTotal = Number(value) * Number(selectProduct.SellPrice);
+
+      const netTotal =
+        Number(value) * Number(selectProduct.SellPrice) +
+        Number(value) * Number(selectProduct.TaxPercentage);
+
+      handleCollectProductData(
+        {
+          target: {
+            name: "Quantity",
+            value: value,
+          },
+        } as any,
+        id
+      );
+
+      handleCollectProductData(
+        {
+          target: {
+            name: "SubTotal",
+            value: subTotal,
+          },
+        } as any,
+        id
+      );
+
+      handleCollectProductData(
+        {
+          target: {
+            name: "NetTotal",
+            value: netTotal,
+          },
+        } as any,
+        id
+      );
+    }
+  };
+
   useEffect(() => {
     if (!selectProduct) return;
     if ("Quantity" in selectProduct) {
       const id = productData?.FrontId!;
-
-      const netTotal =
-        Number(selectProduct.Quantity) * Number(selectProduct.SellPrice) +
-        Number(selectProduct.Quantity) * Number(selectProduct.TaxPercentage);
-
-      const subTotal =
-        Number(selectProduct.Quantity) * Number(selectProduct.SellPrice);
 
       handleCollectProductData(
         {
@@ -86,25 +125,6 @@ const SingleTransactionObject = ({
         } as any,
         id
       );
-      handleCollectProductData(
-        {
-          target: {
-            name: "SubTotal",
-            value: subTotal,
-          },
-        } as any,
-        id
-      );
-
-      handleCollectProductData(
-        {
-          target: {
-            name: "NetTotal",
-            value: netTotal,
-          },
-        } as any,
-        id
-      );
     }
   }, [selectProduct]);
 
@@ -130,7 +150,11 @@ const SingleTransactionObject = ({
             key={index}
             name={changeValue[data.Name]}
             value={productData[changeValue[data.Name]]}
-            onChange={(e) => handleCollectProductData(e, productData.FrontId)}
+            onChange={
+              data.Name === "Quantity"
+                ? (e) => handleQuantity(e, productData.FrontId)
+                : (e) => handleCollectProductData(e, productData.FrontId)
+            }
             onKeyDown={(e) => handleNextLine(e, changeValue[data.Name])}
           />
         );

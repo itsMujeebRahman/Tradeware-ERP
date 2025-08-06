@@ -132,3 +132,18 @@ export const headerField = [
     type: "textarea",
   },
 ];
+
+export const footerFields = [
+  {
+    name: "Total Qty",
+  },
+  {
+    name: "Total Sub",
+  },
+  {
+    name: "Total Tax",
+  },
+  {
+    name: "Total Net",
+  },
+];

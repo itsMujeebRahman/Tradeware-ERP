@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Dropdown from "./elements/Dropdown";
 import { pay, person, product, headerData } from "../types/MainTypes";
-import { payment } from "../constants/MainConstants";
+import { payment } from "../constants/PurchaseConstants";
 
 interface head {
   name: string;

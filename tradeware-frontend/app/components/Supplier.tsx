@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import List from "./List";
 import useSWR from "swr";
 import { person, personReset } from "../types/MainTypes";
+import { PersonBigList, PersonSmallList } from "../constants/ListConstants";
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
@@ -68,6 +69,8 @@ const Supplier = () => {
           setEnableList={setEnableList}
           data={data}
           handleEditDetails={handleEditSupplierDetails}
+          BigList={PersonBigList}
+          SmallList={PersonSmallList}
         />
       ) : (
         ""

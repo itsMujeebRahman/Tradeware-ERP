@@ -13,6 +13,7 @@ import {
   productAdd,
   productAddDataRest,
 } from "../types/MainTypes";
+import { ProductBigList, ProductSmallList } from "../constants/ListConstants";
 
 const Products = () => {
   const [enableCategory, setEnableCategory] = useState<boolean>(false);
@@ -21,7 +22,6 @@ const Products = () => {
   const [productDetails, setProductDetails] =
     useState<productAdd>(productAddDataRest);
   const [enableList, setEnableList] = useState<boolean>(false);
-  const [isProduct, setIsProduct] = useState<boolean>(false);
   const [addDetails, setAddDetails] = useState<boolean>(true);
   const [productId, setProductId] = useState<string>("");
 
@@ -33,12 +33,6 @@ const Products = () => {
   const noData = Object.values(productDetails).every(
     (val) => val === "" || val === 0
   );
-
-  console.log("on", productDetails);
-  const handleProductList = () => {
-    setIsProduct(true);
-    setEnableList(true);
-  };
 
   const handleCancelButton = () => {
     setProductDetails(productDataRest);
@@ -97,9 +91,10 @@ const Products = () => {
       {enableList ? (
         <List
           data={data}
-          isProduct={isProduct}
           setEnableList={setEnableList}
           handleEditDetails={handleEditProductDetails}
+          BigList={ProductBigList}
+          SmallList={ProductSmallList}
         />
       ) : (
         ""
@@ -136,7 +131,7 @@ const Products = () => {
             </button>
             <button
               className="bg-gray-600  p-2 w-20 text-white rounded"
-              onClick={handleProductList}
+              onClick={() => setEnableList(true)}
             >
               List
             </button>

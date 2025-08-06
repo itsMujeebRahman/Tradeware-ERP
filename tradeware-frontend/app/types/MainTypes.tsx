@@ -17,6 +17,10 @@ export interface headerData {
   Date: string;
   PaymentMethod: string;
   Notes: string;
+  TotalQty: string;
+  GrandSubTotal: string;
+  TotalTax: string;
+  GrandNetTotal: string;
 }
 
 export const headReset: headerData = {
@@ -28,6 +32,10 @@ export const headReset: headerData = {
   Date: "",
   PaymentMethod: "",
   Notes: "",
+  TotalQty: "",
+  GrandSubTotal: "",
+  TotalTax: "",
+  GrandNetTotal: "",
 };
 
 export interface productData {
@@ -35,11 +43,11 @@ export interface productData {
   Name: string;
   Code: string;
   Barcode: string;
-  SellPrice: number;
-  Quantity: number;
-  Tax: number;
-  SubTotal: number;
-  NetTotal: number;
+  SellPrice: string;
+  Quantity: string;
+  Tax: string;
+  SubTotal: string;
+  NetTotal: string;
 }
 
 export const productReset: productData = {
@@ -47,16 +55,21 @@ export const productReset: productData = {
   Name: "",
   Code: "",
   Barcode: "",
-  SellPrice: 0,
-  Quantity: 0,
-  Tax: 0,
-  SubTotal: 0,
-  NetTotal: 0,
+  SellPrice: "",
+  Quantity: "",
+  Tax: "",
+  SubTotal: "",
+  NetTotal: "",
 };
 
 export interface pay {
   key: number;
   Name: string;
+}
+
+export interface purchase {
+  headerData: headerData;
+  productData: productData[];
 }
 
 //CATEGORY TYPES
@@ -168,3 +181,8 @@ export const productAddDataRest: productAdd = {
   TaxPercentage: "",
   Description: "",
 };
+
+export interface ListType {
+  name: string;
+  key: number;
+}
