@@ -10,13 +10,14 @@ const changeValue: Record<string, keyof productData> = {
   Code: "Code",
   Barcode: "Barcode",
   Rate: "SellPrice",
-  Quantity: "Quantity",
+  Qty: "Quantity",
   Tax: "Tax",
   "Sub Total": "SubTotal",
   "Net Total": "NetTotal",
 };
 
 interface props {
+  editMode?: boolean;
   product1: product[];
   productData?: productData;
   productDetails: productData[];
@@ -39,6 +40,7 @@ const SingleTransactionObject = ({
   handlDeleteProduct,
   productDetails,
   product1,
+  editMode,
 }: props) => {
   const [selectProduct, setSelectProduct] = useState<
     product | pay | person | null
@@ -138,24 +140,29 @@ const SingleTransactionObject = ({
       {fieldData.map((data, index) => {
         return data.type === "dropdown" ? (
           <Dropdown
-            className={`text-[1vw] h-[4vh] focus:outline-gray-400 col-span-${data.Span}`}
+            className={`text-[1vw] h-[4vh] focus:outline-gray-400 ${data.Span}`}
             key={index}
             data={product1}
             setSelected={setSelectProduct}
-            selected={selectProduct}
+            valueName={productData}
+            editMode={editMode}
           />
         ) : (
           <input
-            className={`text-[1vw] h-[4vh] focus:outline-gray-400 col-span-${data.Span} pl-[0.4vw] `}
+            className={`text-[1vw] h-[4vh] focus:outline-gray-400 ${
+              data.Span
+            } pl-[0.4vw] 
+            ${!editMode && "text-gray-500"}`}
             key={index}
             name={changeValue[data.Name]}
             value={productData[changeValue[data.Name]]}
             onChange={
-              data.Name === "Quantity"
+              data.Name === "Qty"
                 ? (e) => handleQuantity(e, productData.FrontId)
                 : (e) => handleCollectProductData(e, productData.FrontId)
             }
             onKeyDown={(e) => handleNextLine(e, changeValue[data.Name])}
+            disabled={!editMode}
           />
         );
       })}

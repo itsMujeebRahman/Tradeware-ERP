@@ -3,42 +3,42 @@ import { pay } from "../types/MainTypes";
 export const fieldData = [
   {
     Name: "Code",
-    Span: 4,
+    Span: "col-span-4",
     type: "text",
   },
   {
     Name: "Barcode",
-    Span: 4,
+    Span: "col-span-4",
     type: "text",
   },
   {
     Name: "Name",
-    Span: 11,
+    Span: "col-span-11",
     type: "dropdown",
   },
   {
-    Name: "Quantity",
-    Span: 2,
+    Name: "Qty",
+    Span: "col-span-2",
     type: "text",
   },
   {
     Name: "Rate",
-    Span: 2,
+    Span: "col-span-2",
     type: "text",
   },
   {
     Name: "Sub Total",
-    Span: 4,
+    Span: "col-span-4",
     type: "text",
   },
   {
     Name: "Tax",
-    Span: 2,
+    Span: "col-span-2",
     type: "text",
   },
   {
     Name: "Net Total",
-    Span: 4,
+    Span: "col-span-4",
     type: "text",
   },
 ];
@@ -63,42 +63,6 @@ export const payment: pay[] = [
   {
     key: 5,
     Name: "Credit",
-  },
-];
-
-//PURCHASE BODY HEADING
-export const tableHeading = [
-  {
-    Name: "Code",
-    span: 4,
-  },
-  {
-    Name: "Barcode",
-    span: 4,
-  },
-  {
-    Name: "Name",
-    span: 11,
-  },
-  {
-    Name: "Qty",
-    span: 2,
-  },
-  {
-    Name: "Rate",
-    span: 2,
-  },
-  {
-    Name: "Sub Total",
-    span: 4,
-  },
-  {
-    Name: "Tax",
-    span: 2,
-  },
-  {
-    Name: "Net Total",
-    span: 4,
   },
 ];
 

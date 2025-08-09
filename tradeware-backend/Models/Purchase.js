@@ -18,7 +18,7 @@ const purchaseSchema = new mongoose.Schema({
     type: String,
   },
   Date: {
-    type: Date,
+    type: String,
     required: true,
   },
   PaymentMethod: {
@@ -39,6 +39,10 @@ const purchaseSchema = new mongoose.Schema({
   },
   GrandNetTotal: {
     type: Number,
+  },
+  isCancelled: {
+    type: Boolean,
+    default: false,
   },
 
   productDetails: [

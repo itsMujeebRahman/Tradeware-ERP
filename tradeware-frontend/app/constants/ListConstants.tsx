@@ -114,11 +114,11 @@ export const PurchaseBigList = [
     key: 1,
   },
   {
-    name: "InvoiceNo",
+    name: "Invoice No",
     key: 2,
   },
   {
-    name: "ReferenceNo",
+    name: "Reference No",
     key: 3,
   },
   {
@@ -126,22 +126,34 @@ export const PurchaseBigList = [
     key: 4,
   },
   {
-    name: "PaymentMethod",
+    name: "Payment Method",
     key: 5,
+  },
+  {
+    name: "Total Qty",
+    key: 6,
+  },
+  {
+    name: "Net Total",
+    key: 7,
   },
 ];
 
 export const PurchaseSmallList = [
   {
-    name: "Name",
+    name: "Invoice No",
     key: 1,
   },
   {
-    name: "InvoiceNo",
+    name: "Name",
     key: 2,
   },
   {
-    name: "ReferenceNo",
+    name: "Date",
     key: 3,
+  },
+  {
+    name: "Reference No",
+    key: 4,
   },
 ];

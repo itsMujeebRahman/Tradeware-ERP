@@ -1,8 +1,13 @@
 import React from "react";
 import { person } from "../types/MainTypes";
 
+interface PersonInputTypes {
+  name: string;
+  type: string;
+}
+
 interface props {
-  inputName: string;
+  inputName: PersonInputTypes;
   handleCollectDetails: any;
   personDetails: person;
   editData: boolean;
@@ -26,67 +31,35 @@ const InputFields = ({
   editData,
 }: props) => {
   return (
-    <div>
-      {["Name", "Phone", "Email", "TaxNo"].includes(inputName) ? (
-        <div className="flex flex-col ">
-          <p className="text-sm ">{inputName}</p>
-          <input
-            className={`border focus:outline-gray-400 p-1 rounded bg-white ${
-              editData ? " border-gray-500" : "  border-gray-300"
-            }`}
-            name={changeValue[inputName]}
-            onChange={handleCollectDetails}
-            value={personDetails[changeValue[inputName]] || ""}
-            disabled={!editData}
-          />
-        </div>
-      ) : inputName === "Address" ? (
-        <div className="flex flex-col gap-1">
-          <p className="text-sm">{inputName}</p>
-          <input
-            className={`border focus:outline-gray-400 p-1 rounded bg-white ${
-              editData ? " border-gray-500" : "  border-gray-300"
-            }`}
-            name={changeValue[inputName + 1]}
-            onChange={handleCollectDetails}
-            value={personDetails[changeValue[inputName + 1]] || ""}
-            disabled={!editData}
-          />
-          <input
-            className={`border focus:outline-gray-400 p-1 rounded bg-white ${
-              editData ? " border-gray-500" : "  border-gray-300"
-            }`}
-            name={changeValue[inputName + 2]}
-            onChange={handleCollectDetails}
-            value={personDetails[changeValue[inputName + 2]] || ""}
-            disabled={!editData}
-          />
-          <input
-            className={`border focus:outline-gray-400 p-1 rounded bg-white ${
-              editData ? " border-gray-500" : "  border-gray-300"
-            }`}
-            name={changeValue[inputName + 3]}
-            onChange={handleCollectDetails}
-            value={personDetails[changeValue[inputName + 3]] || ""}
-            disabled={!editData}
-          />
-        </div>
-      ) : ["Notes"].includes(inputName) ? (
-        <div className="flex flex-col">
-          <p className="text-sm">{inputName}</p>
-          <textarea
-            className={` border focus:outline-gray-400 p-1 rounded bg-white 
-          h-[20vh] resize-none ${
+    <div className="relative ">
+      <p
+        className="text-txtone absolute top-0 left-0 -translate-y-1/2 translate-x-2 bg-white 
+      px-[0.3vw] z-10"
+      >
+        {inputName.name}
+      </p>
+
+      {inputName.type === "text" ? (
+        <input
+          className={`border focus:outline-gray-400 p-[0.5vw] rounded bg-white w-full ${
+            editData ? " border-gray-500" : "  border-gray-300"
+          }`}
+          name={changeValue[inputName.name]}
+          onChange={handleCollectDetails}
+          value={personDetails[changeValue[inputName.name]] || ""}
+          disabled={!editData}
+        />
+      ) : (
+        <textarea
+          className={` border focus:outline-gray-400 p-1 rounded bg-white 
+          h-[20vh] resize-none w-full ${
             editData ? " border-gray-500" : " border-gray-300"
           }`}
-            name={changeValue[inputName]}
-            onChange={handleCollectDetails}
-            value={personDetails[changeValue[inputName]] || ""}
-            disabled={!editData}
-          />
-        </div>
-      ) : (
-        ""
+          name={changeValue[inputName.name]}
+          onChange={handleCollectDetails}
+          value={personDetails[changeValue[inputName.name]] || ""}
+          disabled={!editData}
+        />
       )}
     </div>
   );

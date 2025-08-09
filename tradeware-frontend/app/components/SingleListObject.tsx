@@ -1,5 +1,5 @@
 import React from "react";
-import { person, ListType, product } from "../types/MainTypes";
+import { person, ListType, product, purchase } from "../types/MainTypes";
 
 type lister = person | product;
 
@@ -9,7 +9,9 @@ interface props {
   handleEditDetails: (id: string) => void;
 }
 
+
 const SingleListObject = ({ object, display, handleEditDetails }: props) => {
+  {}
   return (
     <div>
       <div

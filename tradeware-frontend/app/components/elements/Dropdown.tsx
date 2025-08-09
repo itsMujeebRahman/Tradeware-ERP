@@ -1,23 +1,27 @@
 import React, { SetStateAction, useState } from "react";
-import { headerData, pay, person, product } from "@/app/types/MainTypes";
+import {
+  headerData,
+  pay,
+  person,
+  product,
+  productData,
+} from "@/app/types/MainTypes";
 
 const changeValue: Record<string, keyof headerData> = {
   Name: "Name",
   "Payment Method": "PaymentMethod",
 };
 
-interface inputNameType {
-  name: string;
-}
-
 type data1 = person | pay | product;
+type one = headerData | productData;
 
 interface props {
   data: data1[];
-  inputFieldName?: inputNameType;
+  inputFieldName?: any;
   setSelected: React.Dispatch<SetStateAction<data1 | null>>;
-  selected: data1 | null;
   className: string;
+  valueName?: one;
+  editMode?: boolean;
 }
 
 const Dropdown = ({
@@ -25,7 +29,8 @@ const Dropdown = ({
   inputFieldName,
   className,
   setSelected,
-  selected,
+  valueName,
+  editMode,
 }: props) => {
   const [enableList, setEnableList] = useState<boolean>(false);
   const handleEnableList = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -39,13 +44,22 @@ const Dropdown = ({
     setEnableList(false);
   };
 
+  if (!valueName) {
+    return;
+  }
+  const dropdownvalue =
+    "InvoiceNo" in valueName
+      ? valueName[changeValue[inputFieldName.name]]
+      : (valueName.Name as keyof productData);
+
   return (
     <div className={`relative ${className}`}>
       <input
-        className={`w-full h-full px-[0.4vw]`}
+        className={`w-full h-full px-[0.4vw] ${!editMode && "text-gray-500" }`}
         name={inputFieldName ? changeValue[inputFieldName.name] : ""}
-        value={selected?.Name || ""}
+        value={dropdownvalue}
         onKeyDown={(e) => handleEnableList(e)}
+        disabled={!editMode}
         readOnly
       />
       {enableList && (

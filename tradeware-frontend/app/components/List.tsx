@@ -1,13 +1,15 @@
 import { FullscreenIcon, X } from "lucide-react";
 import React, { useState } from "react";
 import SingleListObject from "./SingleListObject";
-import { headerData, ListType, person, product } from "../types/MainTypes";
+import { headerData, ListType, person, product, purchase } from "../types/MainTypes";
+import SingleListPurchaseObject from "./SingleListPurchaseObject";
 
 type Lister = person[] | product[];
 
 interface props {
   setEnableList: React.Dispatch<React.SetStateAction<boolean>>;
-  data: Lister;
+  data?: Lister;
+  data1?: headerData[];
   handleEditDetails: (id: string) => void;
   BigList: ListType[];
   SmallList: ListType[];
@@ -19,9 +21,11 @@ const List = ({
   handleEditDetails,
   BigList,
   SmallList,
+  data1,
 }: props) => {
   const [windowSize, setWindowSize] = useState<boolean>(false);
   const display = windowSize ? BigList : SmallList;
+
   return (
     <div className="fixed top-0 left-0 h-screen w-screen flex items-center justify-center bg-black/30 z-50 p-4">
       <div
@@ -67,11 +71,19 @@ const List = ({
           overflow-y-scroll rounded-b-xl"
           >
             <>
-              {" "}
               {data?.map((object, index) => (
                 <SingleListObject
                   object={object}
                   key={index}
+                  display={display}
+                  handleEditDetails={handleEditDetails}
+                />
+              ))}
+
+              {data1?.map((object, index) => (
+                <SingleListPurchaseObject
+                  key={index}
+                  object={object}
                   display={display}
                   handleEditDetails={handleEditDetails}
                 />

@@ -13,9 +13,9 @@ import {
   productReset,
 } from "../types/MainTypes";
 import {
+  fieldData,
   footerFields,
   headerField,
-  tableHeading,
 } from "../constants/PurchaseConstants";
 import List from "./List";
 import { PurchaseBigList, PurchaseSmallList } from "../constants/ListConstants";
@@ -38,6 +38,7 @@ const Purchase = () => {
     "http://localhost:3001/purchase",
     fetcher
   );
+
   const { data: product1 } = useSWR("http://localhost:3001/product", fetcher);
 
   const [productDetails, setProductDetails] = useState<productData[]>([
@@ -46,6 +47,9 @@ const Purchase = () => {
 
   const [headerData, setHeaderData] = useState<headerData>(headReset);
   const [enableList, setEnableList] = useState<boolean>(false);
+  const [addPurchase, setAddPurchase] = useState<boolean>(true);
+  const [getId, setGetId] = useState<string>("");
+  const [editMode, setEditMode] = useState<boolean>(true);
 
   useEffect(() => {
     setHeaderData((Prev) => ({
@@ -56,18 +60,36 @@ const Purchase = () => {
   }, [product1]);
 
   const handleSendInvoiceData = async () => {
-    try {
-      const response = await axios.post("http://localhost:3001/purchase", {
-        productDetails,
-        headerData,
-      });
-      toast.success(response.data.message);
-    } catch (error: any) {
-      toast.error(error.resposne?.data?.error);
+    if (addPurchase) {
+      try {
+        const { _id, ...headerPayload } = headerData;
+        const response = await axios.post("http://localhost:3001/purchase", {
+          productDetails,
+          headerPayload,
+        });
+        toast.success(response.data.message);
+      } catch (error: any) {
+        toast.error(error.resposne?.data?.error);
+      }
+      handleClearButton();
+      pulse();
+    } else {
+      try {
+        const response = await axios.post(
+          `http://localhost:3001/purchase/${getId}`,
+          {
+            productDetails,
+            headerData,
+          }
+        );
+        toast.success(response.data.message);
+      } catch (error: any) {
+        toast.error(error.resposne?.data?.error);
+      }
+      handleClearButton();
+      pulse();
+      setAddPurchase(true);
     }
-    setProductDetails([{ ...productReset, FrontId: 1 }]);
-    setHeaderData(headReset);
-    pulse();
   };
 
   const handleFooterData = () => {
@@ -146,13 +168,54 @@ const Purchase = () => {
     );
   };
 
-  const handleEditPurchase = () => {};
+  const handleClearButton = () => {
+    setEditMode(true);
+    setHeaderData({
+      ...headReset,
+      InvoiceNo: purchase1?.length + 1,
+      Date: new Date().toISOString().split("T")[0],
+    });
+    setProductDetails([{ ...productReset, FrontId: 1 }]);
+  };
+
+  const handleEditPurchase = (id: string) => {
+    setEditMode(false);
+    setAddPurchase(false);
+    setEnableList(false);
+    setGetId(id);
+    const find = purchase1.find((item: headerData) => item._id === id);
+    setHeaderData({
+      ...find,
+      Date: new Date(find.Date).toISOString().split("T")[0],
+    });
+    setProductDetails(find?.productDetails);
+  };
+
+  const handleCancelPurchase = async (id: string) => {
+    try {
+      await axios.post(`http://localhost:3001/purchase/${id}`, {
+        ...headerData,
+        isCancelled: true,
+      });
+      toast.success(`Invoice ${headerData.InvoiceNo} Cancelled Successfully`);
+      setHeaderData({
+        ...headReset,
+        InvoiceNo: purchase1?.length + 1,
+        Date: new Date().toISOString().split("T")[0],
+      });
+      setProductDetails([{ ...productReset, FrontId: 1 }]);
+    } catch (error: any) {
+      toast.error(error.resposne?.data?.error);
+    }
+    pulse();
+  };
+
   return (
     <div className=" flex flex-col gap-[0.2vw] h-full">
       {enableList ? (
         <List
           setEnableList={setEnableList}
-          data={purchase1}
+          data1={purchase1}
           handleEditDetails={handleEditPurchase}
           BigList={PurchaseBigList}
           SmallList={PurchaseSmallList}
@@ -162,22 +225,49 @@ const Purchase = () => {
       )}
       <div className=" flex items-center justify-between p-[0.7vw] rounded-xl h-3/40">
         <h1 className="font-bold text-[1.5vw]">
-          Purchase Invoice / {purchase1?.length + 1}
+          Purchase Invoice / {headerData.InvoiceNo}
         </h1>
-        <div className="flex gap-[0.4vw]">
-          <Button className="w-[5vw] h-[5vh] text-white text-[1vw]">
+        <div className="flex gap-[0.4vw] items-center">
+          {headerData.isCancelled ? (
+            <div>
+              <p className="text-red-500 font-bold text-[1.2vw] mr-[1.5vw]">
+                CANCELLED
+              </p>
+            </div>
+          ) : (
+            ""
+          )}
+          <Button
+            className="w-[5vw] h-[5vh] text-white text-[1vw]"
+            onClick={handleClearButton}
+          >
+            New
+          </Button>
+          <Button
+            className="w-[5vw] h-[5vh] text-white text-[1vw]"
+            onClick={() => setEditMode(true)}
+            disabled={headerData.isCancelled}
+          >
             Edit
           </Button>
-          <Button className="w-[5vw] h-[5vh] text-white text-[1vw]">
+          <Button
+            className="w-[5vw] h-[5vh] text-white text-[1vw]"
+            onClick={() => setEnableList(true)}
+          >
             List
           </Button>
           <Button
             className="w-[5vw] h-[5vh] text-white text-[1vw]"
             onClick={handleSendInvoiceData}
+            disabled={headerData.isCancelled}
           >
             Save
           </Button>
-          <Button className="w-[5vw] h-[5vh] text-white text-[1vw]">
+          <Button
+            className="w-[5vw] h-[5vh] text-white text-[1vw]"
+            onClick={() => handleCancelPurchase(headerData._id)}
+            disabled={headerData.isCancelled}
+          >
             Cancel
           </Button>
         </div>
@@ -194,17 +284,19 @@ const Purchase = () => {
               supplier1={supplier1}
               handlecollectHeaderData={handlecollectHeaderData}
               headerData={headerData}
+              editMode={editMode}
             />
           ))}
         </div>
-        <div className=" rounded-xl h-66/100 flex-grow bg-white border-gray-300 ">
+        <div className=" rounded-xl h-66/100   bg-white border-gray-300 ">
           <div
             className="rounded-t-xl  grid grid-cols-34 h-5/50 items-center border border-gray-300 
           pr-[1vw] pl-[0.5vw] bg-gray-100"
           >
-            {tableHeading.map((item) => (
+            {fieldData.map((item, index) => (
               <span
-                className={`text-[1.1vw] col-span-${item.span} border-r border-gray-300 pl-[0.3vw]`}
+                className={`text-[1.1vw] ${item.Span} border-r border-gray-300 pl-[0.3vw]`}
+                key={index}
               >
                 {item.Name}
               </span>
@@ -223,6 +315,7 @@ const Purchase = () => {
                 handleCollectProductData={handleCollectProductData}
                 productDetails={productDetails}
                 productData={productData}
+                editMode={editMode}
               />
             ))}
 

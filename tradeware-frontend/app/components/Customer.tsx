@@ -7,6 +7,7 @@ import List from "./List";
 import useSWR from "swr";
 import { person, personReset } from "../types/MainTypes";
 import { PersonBigList, PersonSmallList } from "../constants/ListConstants";
+import { PersonInput } from "../constants/PersonConstnats";
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
@@ -100,19 +101,17 @@ const Customer = () => {
           </button>
         </div>
       </div>
-      <div className=" rounded-xl h-[84vh] columns-3 backdrop-blur-xl bg-white border border-gray-300 py-5 ">
-        <div className="px-5 flex flex-col gap-3 break-inside-avoid ">
-          {["Name", "Address", "Phone", "Email", "TaxNo", "Notes"].map(
-            (inputName, index) => (
-              <InputFields
-                key={index}
-                inputName={inputName}
-                handleCollectDetails={handleCollectCustomerDetails}
-                personDetails={customerDetails}
-                editData={editData}
-              />
-            )
-          )}
+      <div className=" rounded-xl h-[87vh] columns-3 backdrop-blur-xl bg-white border border-gray-300 py-[1.5vw] ">
+        <div className="px-5 flex flex-col gap-[1.4vw] break-inside-avoid">
+          {PersonInput.map((inputName, index) => (
+            <InputFields
+              key={index}
+              inputName={inputName}
+              handleCollectDetails={handleCollectCustomerDetails}
+              personDetails={customerDetails}
+              editData={editData}
+            />
+          ))}
         </div>
       </div>
     </div>

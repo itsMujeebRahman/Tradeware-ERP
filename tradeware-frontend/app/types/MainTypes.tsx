@@ -21,6 +21,8 @@ export interface headerData {
   GrandSubTotal: string;
   TotalTax: string;
   GrandNetTotal: string;
+  _id: string;
+  isCancelled: boolean;
 }
 
 export const headReset: headerData = {
@@ -36,6 +38,8 @@ export const headReset: headerData = {
   GrandSubTotal: "",
   TotalTax: "",
   GrandNetTotal: "",
+  _id: "",
+  isCancelled: false,
 };
 
 export interface productData {

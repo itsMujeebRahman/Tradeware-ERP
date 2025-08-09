@@ -38,7 +38,7 @@ const Products = () => {
     setProductDetails(productDataRest);
     setAddDetails(true);
     setEditDetails(true);
-    console.log(productDetails);
+
   };
 
   const handleCollectProductDetails = (e: ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +68,6 @@ const Products = () => {
       } catch (error: any) {
         toast.error(error.resposne?.data?.error);
       }
-      console.log("productDetails", productDetails);
       mutate();
       setProductDetails(productDataRest);
     } else {

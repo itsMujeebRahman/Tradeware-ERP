@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import Dropdown from "./elements/Dropdown";
 import { pay, person, product, headerData } from "../types/MainTypes";
 import { payment } from "../constants/PurchaseConstants";
@@ -13,6 +13,7 @@ interface props {
   supplier1: person[];
   handlecollectHeaderData: any;
   headerData: headerData;
+  editMode: boolean;
 }
 
 const changeValue: Record<string, keyof headerData> = {
@@ -31,6 +32,7 @@ const TransactionInputField = ({
   supplier1,
   handlecollectHeaderData,
   headerData,
+  editMode,
 }: props) => {
   const [selectHead, setSelectHead] = useState<person | pay | product | null>(
     null
@@ -75,33 +77,45 @@ const TransactionInputField = ({
 
       {inputName.type === "dropdown" ? (
         <Dropdown
-          className="border border-gray-300 h-[2.5vw] rounded w-[20vw]"
+          className={`border ${
+            editMode ? "border-gray-400" : " border-gray-200"
+          } h-[2.5vw] rounded w-[20vw]`}
           data={dropdownData}
-          selected={selectHead}
           setSelected={setSelectHead}
           inputFieldName={inputName}
+          valueName={headerData}
+          editMode={editMode}
         />
       ) : inputName.type === "textarea" ? (
         <textarea
-          className="border border-gray-300 w-full h-[6.5vw] p-[0.5vw] rounded resize-none"
+          className={`border border-gray-300 w-full h-[6.5vw] p-[0.5vw] rounded resize-none focus:outline-0 ${
+            editMode ? "border-gray-400" : " border-gray-200"
+          } ${!editMode && "text-gray-500"}`}
           name={changeValue[inputName.name]}
           value={headerData[changeValue[inputName.name]]}
           onChange={handlecollectHeaderData}
+          disabled={!editMode}
         />
       ) : inputName.type === "date" ? (
         <input
-          className="border border-gray-300 w-full h-[2.5vw] px-[0.5vw] rounded "
+          className={`border border-gray-300 w-full h-[2.5vw] px-[0.5vw] rounded focus:outline-0 ${
+            editMode ? "border-gray-400" : " border-gray-200"
+          } ${!editMode && "text-gray-500"}`}
           type="Date"
           name={changeValue[inputName.name]}
           value={headerData[changeValue[inputName.name]]}
           onChange={handlecollectHeaderData}
+          disabled={!editMode}
         />
       ) : (
         <input
-          className="border border-gray-300 w-full h-[2.5vw] px-[0.5vw] rounded "
+          className={`border border-gray-300 w-full h-[2.5vw] px-[0.5vw] rounded focus:outline-0 ${
+            editMode ? "border-gray-400" : " border-gray-200"
+          } ${!editMode && "text-gray-500"}`}
           name={changeValue[inputName.name]}
           value={headerData[changeValue[inputName.name]]}
           onChange={handlecollectHeaderData}
+          disabled={!editMode}
         />
       )}
     </div>
